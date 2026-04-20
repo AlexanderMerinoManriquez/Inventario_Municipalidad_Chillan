@@ -1,0 +1,97 @@
+/* ===================== */
+/* ===== GENERAL ======= */
+/* ===================== */
+
+body {
+    background: #e9ecef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: "Segoe UI", Arial, sans-serif;
+    margin: 0;
+}
+
+/* ===================== */
+/* ===== LOGIN BOX ===== */
+/* ===================== */
+
+.login-box {
+    background: #ffffff;
+    padding: 30px;
+    width: 340px;
+    border-radius: 6px;
+    border: 1px solid #dcdcdc;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* ===================== */
+/* ===== TITLE ========= */
+/* ===================== */
+
+.login-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 25px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* ===================== */
+/* ===== INPUTS ======== */
+/* ===================== */
+
+.login-box input {
+    width: 70%;
+    padding: 9px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    outline: none;
+    display: block;
+    margin: 15px auto 0 auto;
+}
+
+.login-box input:focus {
+    border-color: #007bff;
+}
+
+/* ===================== */
+/* ===== BUTTON ======== */
+/* ===================== */
+
+button {
+    width: 50%;
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+    background: #b7d7ec;
+    color: #000000;
+    font-weight: 600;
+    transition: 0.2s;
+    cursor: pointer;
+    display: block;
+    margin: 15px auto 0 auto;
+}
+
+
+button:hover {
+    background: #e0cdcd; /* más oscuro al pasar el mouse */
+}
+
+button:active {
+    background: #e5eef8;
+    transform: scale(0.98);
+}
+
+/* ===================== */
+/* ===== FOOTER TEXT === */
+/* ===================== */
+
+.login-footer {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #666;
+}

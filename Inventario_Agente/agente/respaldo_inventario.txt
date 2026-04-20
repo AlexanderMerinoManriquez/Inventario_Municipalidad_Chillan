@@ -1,0 +1,504 @@
+
+===== 2026-04-17 15:53:01 | PRE_ENVIO =====
+{
+    "nombre_pc": "DESKTOP-5R7M0U7",
+    "usuario": "alexander merino manriquez",
+    "departamento": "WORKGROUP",
+    "sistema_operativo": "Windows 10 Pro x64",
+    "anydesk": "457504316",
+    "cpu": "AMD Ryzen 5 4500U",
+    "ram": "11.42 GB",
+    "disco_total": "119.13 GB",
+    "ip": "195.168.82.243",
+    "uuid": "401800C7-53B8-EB11-810A-E4A8DF8CDE24",
+    "serial": "MP1Z6F33",
+    "discos": [
+        {
+            "modelo": "WDC WD10SPZX-08Z10",
+            "capacidad": "931.51 GB",
+            "espacio_libre_gb": 919.0,
+            "tipo": "HDD",
+            "salud": "100%",
+            "horas": 8052,
+            "errores": 0,
+            "temperatura": 48
+        },
+        {
+            "modelo": "SAMSUNG MZALQ128HBHQ-000L1",
+            "capacidad": "119.24 GB",
+            "espacio_libre_gb": 44.93,
+            "tipo": "SSD",
+            "salud": "100%",
+            "horas": 0,
+            "errores": 0,
+            "temperatura": 41
+        }
+    ],
+    "codigo_inventario": null,
+    "ubicacion": "18 de septiembre",
+    "departamento_manual": "area de informatica",
+    "observaciones": "requiere mas ram"
+}
+
+===== 2026-04-17 15:53:01 | GUARDADO_OK =====
+{
+    "nombre_pc": "DESKTOP-5R7M0U7",
+    "usuario": "alexander merino manriquez",
+    "departamento": "WORKGROUP",
+    "sistema_operativo": "Windows 10 Pro x64",
+    "anydesk": "457504316",
+    "cpu": "AMD Ryzen 5 4500U",
+    "ram": "11.42 GB",
+    "disco_total": "119.13 GB",
+    "ip": "195.168.82.243",
+    "uuid": "401800C7-53B8-EB11-810A-E4A8DF8CDE24",
+    "serial": "MP1Z6F33",
+    "discos": [
+        {
+            "modelo": "WDC WD10SPZX-08Z10",
+            "capacidad": "931.51 GB",
+            "espacio_libre_gb": 919.0,
+            "tipo": "HDD",
+            "salud": "100%",
+            "horas": 8052,
+            "errores": 0,
+            "temperatura": 48
+        },
+        {
+            "modelo": "SAMSUNG MZALQ128HBHQ-000L1",
+            "capacidad": "119.24 GB",
+            "espacio_libre_gb": 44.93,
+            "tipo": "SSD",
+            "salud": "100%",
+            "horas": 0,
+            "errores": 0,
+            "temperatura": 41
+        }
+    ],
+    "codigo_inventario": null,
+    "ubicacion": "18 de septiembre",
+    "departamento_manual": "area de informatica",
+    "observaciones": "requiere mas ram"
+}
+RESPUESTA: {"success":true,"message":"Equipo actualizado"}
+
+
+===== 2026-04-17 16:01:22 | PRE_ENVIO =====
+{
+    "nombre_pc": "DESKTOP-5R7M0U7",
+    "usuario": "alexander merino manriquez",
+    "departamento": "WORKGROUP",
+    "sistema_operativo": "Windows 10 Pro x64",
+    "anydesk": "457504316",
+    "cpu": "AMD Ryzen 5 4500U",
+    "ram": "11.42 GB",
+    "disco_total": "119.13 GB",
+    "ip": "195.168.82.243",
+    "uuid": "401800C7-53B8-EB11-810A-E4A8DF8CDE24",
+    "serial": "MP1Z6F33",
+    "discos": [
+        {
+            "modelo": "WDC WD10SPZX-08Z10",
+            "capacidad": "931.51 GB",
+            "espacio_libre_gb": 919.0,
+            "tipo": "HDD",
+            "salud": "100%",
+            "horas": 8053,
+            "errores": 0,
+            "temperatura": 48
+        },
+        {
+            "modelo": "SAMSUNG MZALQ128HBHQ-000L1",
+            "capacidad": "119.24 GB",
+            "espacio_libre_gb": 44.93,
+            "tipo": "SSD",
+            "salud": "100%",
+            "horas": 0,
+            "errores": 0,
+            "temperatura": 42
+        }
+    ],
+    "codigo_inventario": null,
+    "ubicacion": "18 de septiembre",
+    "departamento_manual": "area de informatica",
+    "observaciones": "requiere mas ram"
+}
+
+===== 2026-04-17 16:01:22 | GUARDADO_OK =====
+{
+    "nombre_pc": "DESKTOP-5R7M0U7",
+    "usuario": "alexander merino manriquez",
+    "departamento": "WORKGROUP",
+    "sistema_operativo": "Windows 10 Pro x64",
+    "anydesk": "457504316",
+    "cpu": "AMD Ryzen 5 4500U",
+    "ram": "11.42 GB",
+    "disco_total": "119.13 GB",
+    "ip": "195.168.82.243",
+    "uuid": "401800C7-53B8-EB11-810A-E4A8DF8CDE24",
+    "serial": "MP1Z6F33",
+    "discos": [
+        {
+            "modelo": "WDC WD10SPZX-08Z10",
+            "capacidad": "931.51 GB",
+            "espacio_libre_gb": 919.0,
+            "tipo": "HDD",
+            "salud": "100%",
+            "horas": 8053,
+            "errores": 0,
+            "temperatura": 48
+        },
+        {
+            "modelo": "SAMSUNG MZALQ128HBHQ-000L1",
+            "capacidad": "119.24 GB",
+            "espacio_libre_gb": 44.93,
+            "tipo": "SSD",
+            "salud": "100%",
+            "horas": 0,
+            "errores": 0,
+            "temperatura": 42
+        }
+    ],
+    "codigo_inventario": null,
+    "ubicacion": "18 de septiembre",
+    "departamento_manual": "area de informatica",
+    "observaciones": "requiere mas ram"
+}
+RESPUESTA: {"success":true,"message":"Equipo actualizado"}
+
+
+===== 2026-04-20 08:05:51 | PRE_ENVIO =====
+{
+    "nombre_pc": "DESKTOP-5R7M0U7",
+    "usuario": "alexander merino miller",
+    "departamento": "WORKGROUP",
+    "sistema_operativo": "Windows 10 Pro x64",
+    "anydesk": "457504316",
+    "cpu": "AMD Ryzen 5 4500U",
+    "ram": "11.42 GB",
+    "disco_total": "119.13 GB",
+    "ip": "195.168.82.243",
+    "uuid": "401800C7-53B8-EB11-810A-E4A8DF8CDE24",
+    "serial": "MP1Z6F33",
+    "discos": [
+        {
+            "modelo": "WDC WD10SPZX-08Z10",
+            "capacidad": "931.51 GB",
+            "espacio_libre_gb": 919.0,
+            "tipo": "HDD",
+            "salud": "100%",
+            "horas": 8053,
+            "errores": 0,
+            "temperatura": 48
+        },
+        {
+            "modelo": "SAMSUNG MZALQ128HBHQ-000L1",
+            "capacidad": "119.24 GB",
+            "espacio_libre_gb": 44.58,
+            "tipo": "SSD",
+            "salud": "100%",
+            "horas": 0,
+            "errores": 0,
+            "temperatura": 35
+        }
+    ],
+    "codigo_inventario": null,
+    "ubicacion": "18 de septiembre",
+    "departamento_manual": "departamento de informatica",
+    "observaciones": "requiere mas ram"
+}
+
+===== 2026-04-20 08:05:51 | GUARDADO_OK =====
+{
+    "nombre_pc": "DESKTOP-5R7M0U7",
+    "usuario": "alexander merino miller",
+    "departamento": "WORKGROUP",
+    "sistema_operativo": "Windows 10 Pro x64",
+    "anydesk": "457504316",
+    "cpu": "AMD Ryzen 5 4500U",
+    "ram": "11.42 GB",
+    "disco_total": "119.13 GB",
+    "ip": "195.168.82.243",
+    "uuid": "401800C7-53B8-EB11-810A-E4A8DF8CDE24",
+    "serial": "MP1Z6F33",
+    "discos": [
+        {
+            "modelo": "WDC WD10SPZX-08Z10",
+            "capacidad": "931.51 GB",
+            "espacio_libre_gb": 919.0,
+            "tipo": "HDD",
+            "salud": "100%",
+            "horas": 8053,
+            "errores": 0,
+            "temperatura": 48
+        },
+        {
+            "modelo": "SAMSUNG MZALQ128HBHQ-000L1",
+            "capacidad": "119.24 GB",
+            "espacio_libre_gb": 44.58,
+            "tipo": "SSD",
+            "salud": "100%",
+            "horas": 0,
+            "errores": 0,
+            "temperatura": 35
+        }
+    ],
+    "codigo_inventario": null,
+    "ubicacion": "18 de septiembre",
+    "departamento_manual": "departamento de informatica",
+    "observaciones": "requiere mas ram"
+}
+RESPUESTA: {"success":true,"message":"Equipo actualizado"}
+
+
+===== 2026-04-20 08:13:14 | PRE_ENVIO =====
+{
+    "nombre_pc": "DESKTOP-5R7M0U7",
+    "usuario": "alexander merino vaquer",
+    "departamento": "WORKGROUP",
+    "sistema_operativo": "Windows 10 Pro x64",
+    "anydesk": "457504316",
+    "cpu": "AMD Ryzen 5 4500U",
+    "ram": "11.42 GB",
+    "disco_total": "119.13 GB",
+    "ip": "195.168.82.243",
+    "uuid": "401800C7-53B8-EB11-810A-E4A8DF8CDE24",
+    "serial": "MP1Z6F33",
+    "discos": [
+        {
+            "modelo": "WDC WD10SPZX-08Z10",
+            "capacidad": "931.51 GB",
+            "espacio_libre_gb": 919.0,
+            "tipo": "HDD",
+            "salud": "100%",
+            "horas": 8053,
+            "errores": 0,
+            "temperatura": 48
+        },
+        {
+            "modelo": "SAMSUNG MZALQ128HBHQ-000L1",
+            "capacidad": "119.24 GB",
+            "espacio_libre_gb": 44.57,
+            "tipo": "SSD",
+            "salud": "100%",
+            "horas": 0,
+            "errores": 0,
+            "temperatura": 35
+        }
+    ],
+    "codigo_inventario": null,
+    "ubicacion": "diesiocho de septiembre",
+    "departamento_manual": "departamento de informatica",
+    "observaciones": "requiere mas ram"
+}
+
+===== 2026-04-20 08:13:14 | GUARDADO_OK =====
+{
+    "nombre_pc": "DESKTOP-5R7M0U7",
+    "usuario": "alexander merino vaquer",
+    "departamento": "WORKGROUP",
+    "sistema_operativo": "Windows 10 Pro x64",
+    "anydesk": "457504316",
+    "cpu": "AMD Ryzen 5 4500U",
+    "ram": "11.42 GB",
+    "disco_total": "119.13 GB",
+    "ip": "195.168.82.243",
+    "uuid": "401800C7-53B8-EB11-810A-E4A8DF8CDE24",
+    "serial": "MP1Z6F33",
+    "discos": [
+        {
+            "modelo": "WDC WD10SPZX-08Z10",
+            "capacidad": "931.51 GB",
+            "espacio_libre_gb": 919.0,
+            "tipo": "HDD",
+            "salud": "100%",
+            "horas": 8053,
+            "errores": 0,
+            "temperatura": 48
+        },
+        {
+            "modelo": "SAMSUNG MZALQ128HBHQ-000L1",
+            "capacidad": "119.24 GB",
+            "espacio_libre_gb": 44.57,
+            "tipo": "SSD",
+            "salud": "100%",
+            "horas": 0,
+            "errores": 0,
+            "temperatura": 35
+        }
+    ],
+    "codigo_inventario": null,
+    "ubicacion": "diesiocho de septiembre",
+    "departamento_manual": "departamento de informatica",
+    "observaciones": "requiere mas ram"
+}
+RESPUESTA: {"success":true,"message":"Equipo actualizado"}
+
+
+===== 2026-04-20 08:53:16 | PRE_ENVIO =====
+{
+    "nombre_pc": "DESKTOP-5R7M0U7",
+    "usuario": "alexander merino} miller",
+    "departamento": "WORKGROUP",
+    "sistema_operativo": "Windows 10 Pro x64",
+    "anydesk": "457504316",
+    "cpu": "AMD Ryzen 5 4500U",
+    "ram": "11.42 GB",
+    "disco_total": "119.13 GB",
+    "ip": "195.168.82.243",
+    "uuid": "401800C7-53B8-EB11-810A-E4A8DF8CDE24",
+    "serial": "MP1Z6F33",
+    "discos": [
+        {
+            "modelo": "WDC WD10SPZX-08Z10",
+            "capacidad": "931.51 GB",
+            "espacio_libre_gb": 919.0,
+            "tipo": "HDD",
+            "salud": "100%",
+            "horas": 8053,
+            "errores": 0,
+            "temperatura": 48
+        },
+        {
+            "modelo": "SAMSUNG MZALQ128HBHQ-000L1",
+            "capacidad": "119.24 GB",
+            "espacio_libre_gb": 44.55,
+            "tipo": "SSD",
+            "salud": "100%",
+            "horas": 0,
+            "errores": 0,
+            "temperatura": 41
+        }
+    ],
+    "codigo_inventario": null,
+    "ubicacion": "diesiocho de sepriembre",
+    "departamento_manual": "area de informatica",
+    "observaciones": "requeire mas ram"
+}
+
+===== 2026-04-20 08:53:16 | ERROR_SERVIDOR =====
+{
+    "nombre_pc": "DESKTOP-5R7M0U7",
+    "usuario": "alexander merino} miller",
+    "departamento": "WORKGROUP",
+    "sistema_operativo": "Windows 10 Pro x64",
+    "anydesk": "457504316",
+    "cpu": "AMD Ryzen 5 4500U",
+    "ram": "11.42 GB",
+    "disco_total": "119.13 GB",
+    "ip": "195.168.82.243",
+    "uuid": "401800C7-53B8-EB11-810A-E4A8DF8CDE24",
+    "serial": "MP1Z6F33",
+    "discos": [
+        {
+            "modelo": "WDC WD10SPZX-08Z10",
+            "capacidad": "931.51 GB",
+            "espacio_libre_gb": 919.0,
+            "tipo": "HDD",
+            "salud": "100%",
+            "horas": 8053,
+            "errores": 0,
+            "temperatura": 48
+        },
+        {
+            "modelo": "SAMSUNG MZALQ128HBHQ-000L1",
+            "capacidad": "119.24 GB",
+            "espacio_libre_gb": 44.55,
+            "tipo": "SSD",
+            "salud": "100%",
+            "horas": 0,
+            "errores": 0,
+            "temperatura": 41
+        }
+    ],
+    "codigo_inventario": null,
+    "ubicacion": "diesiocho de sepriembre",
+    "departamento_manual": "area de informatica",
+    "observaciones": "requeire mas ram"
+}
+RESPUESTA: {"success":false,"message":"Dato inv\u00e1lido en usuario","code":"GENERAL"}
+
+
+===== 2026-04-20 08:57:45 | PRE_ENVIO =====
+{
+    "nombre_pc": "DESKTOP-5R7M0U7",
+    "usuario": "alexander merino manriquez",
+    "departamento": "WORKGROUP",
+    "sistema_operativo": "Windows 10 Pro x64",
+    "anydesk": "457504316",
+    "cpu": "AMD Ryzen 5 4500U",
+    "ram": "11.42 GB",
+    "disco_total": "119.13 GB",
+    "ip": "195.168.82.243",
+    "uuid": "401800C7-53B8-EB11-810A-E4A8DF8CDE24",
+    "serial": "MP1Z6F33",
+    "discos": [
+        {
+            "modelo": "WDC WD10SPZX-08Z10",
+            "capacidad": "931.51 GB",
+            "espacio_libre_gb": 919.0,
+            "tipo": "HDD",
+            "salud": "100%",
+            "horas": 8053,
+            "errores": 0,
+            "temperatura": 48
+        },
+        {
+            "modelo": "SAMSUNG MZALQ128HBHQ-000L1",
+            "capacidad": "119.24 GB",
+            "espacio_libre_gb": 44.54,
+            "tipo": "SSD",
+            "salud": "100%",
+            "horas": 0,
+            "errores": 0,
+            "temperatura": 40
+        }
+    ],
+    "codigo_inventario": null,
+    "ubicacion": "diesiocho de septiembre",
+    "departamento_manual": "area de informatica",
+    "observaciones": "requiere mas ram"
+}
+
+===== 2026-04-20 08:57:45 | GUARDADO_OK =====
+{
+    "nombre_pc": "DESKTOP-5R7M0U7",
+    "usuario": "alexander merino manriquez",
+    "departamento": "WORKGROUP",
+    "sistema_operativo": "Windows 10 Pro x64",
+    "anydesk": "457504316",
+    "cpu": "AMD Ryzen 5 4500U",
+    "ram": "11.42 GB",
+    "disco_total": "119.13 GB",
+    "ip": "195.168.82.243",
+    "uuid": "401800C7-53B8-EB11-810A-E4A8DF8CDE24",
+    "serial": "MP1Z6F33",
+    "discos": [
+        {
+            "modelo": "WDC WD10SPZX-08Z10",
+            "capacidad": "931.51 GB",
+            "espacio_libre_gb": 919.0,
+            "tipo": "HDD",
+            "salud": "100%",
+            "horas": 8053,
+            "errores": 0,
+            "temperatura": 48
+        },
+        {
+            "modelo": "SAMSUNG MZALQ128HBHQ-000L1",
+            "capacidad": "119.24 GB",
+            "espacio_libre_gb": 44.54,
+            "tipo": "SSD",
+            "salud": "100%",
+            "horas": 0,
+            "errores": 0,
+            "temperatura": 40
+        }
+    ],
+    "codigo_inventario": null,
+    "ubicacion": "diesiocho de septiembre",
+    "departamento_manual": "area de informatica",
+    "observaciones": "requiere mas ram"
+}
+RESPUESTA: {"success":true,"message":"Equipo actualizado"}
+

@@ -1,0 +1,6 @@
+pyinstaller --onefile ^
+--manifest admin.manifest ^
+--add-binary "vcruntime140_1.dll;." ^
+inventario.py
+
+Tener en cuenta que el archivo "Smartctl.exe" debe estar en la misma ruta del ejecutable creado ya que se ocupa como una dependecia.

@@ -1,0 +1,17 @@
+# Entorno virtual de Python
+venv/
+
+# Configuración de VS Code
+.vscode/
+
+# Archivos de Python compilados cache, en resumen no son necesarios
+__pycache__/
+*.pyc
+
+# Variables de entorno (Rcomendado ya que contiene bastantes archivos)
+.env
+
+# Archivos que tienen que ver con pyinstaller (al crear el ejecutable)
+inventario.spec
+dist/
+build/

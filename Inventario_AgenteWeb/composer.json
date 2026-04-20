@@ -1,0 +1,8 @@
+{
+    "name": "equipos/ficha-pdf",
+    "description": "esficificacion de cada equipo",
+    "type": "library",
+    "require": {
+        "dompdf/dompdf": "^2.0"
+    }
+}
