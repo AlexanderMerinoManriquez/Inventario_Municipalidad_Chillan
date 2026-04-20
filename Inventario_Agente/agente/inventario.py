@@ -19,15 +19,37 @@ from funciones.discos.main import obtener_discos_smart
 from funciones.discos.utils import obtener_ruta_smart
 
 def guardar_respaldo(data, estado, respuesta=""):
-    ruta_respaldo = os.path.join(os.path.dirname(__file__), "respaldo_inventario.txt")
-    fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
-    with open(ruta_respaldo, "a", encoding="utf-8") as f:
-        f.write(f"\n===== {fecha} | {estado} =====\n")
-        f.write(json.dumps(data, ensure_ascii=False, indent=4))
-        if respuesta:
-            f.write(f"\nRESPUESTA: {respuesta}\n")
-        f.write("\n")
+    try:
+        carpeta = os.path.join(os.path.dirname(__file__),"RESPALDOS_FALLIDOS")
+        os.makedirs(carpeta, exist_ok=True)
+        
+        fecha_archivo = datetime.now().strftime("%Y%m%d_%H%M%S")
+        fecha_legible = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        nombre_pc = str(data.het("nombre_pc", "sin_nombre")).replace("", "_")
+        
+        nombre_archivo = F"ERROR_{fecha_archivo}_{nombre_pc}.txt"
+        ruta_respaldo = os.path.join(carpeta, nombre_archivo)
+        
+        contenido = {
+            "fecha": fecha_legible,
+            "estado": estado,
+            "datos_equipo": data
+        }
+        
+        with open (ruta_respaldo, "w", encoding="utf-8") as f:
+            json.dump(contenido, f, ensure_ascii=false, indent=4)
+            
+        print("\n" + "=" * 60)
+        print(" NO SE PUDO GUARDAR EN LA BASE DE DATOS")
+        print(f"    RESPALDO CREADO: {ruta_respaldo}")
+        print("LOS DATOS DEL EQUIPO FUERON GUARDADOS LOCALMENTE")
+        print("-" * 60)
+        
+    except exception as e:
+        print("\n" + "=" * 60)
+        print("ERROR AL INTENTAR CREAR EL RESPALDO LOCAL")
+        print("detalle:", e)
+        print("-" * 60)
 
 admin()
 
@@ -74,6 +96,30 @@ while True:
     if departamento_manual:
         break
     print("El departamento del dispositivo es obligatorio.")
+    
+while True:
+    marca_pantalla = input("Marca de la pantalla: ").strip().lower()
+    if marca_pantalla:
+        break
+    print("La marca de la pantalla debe ser obligatoria.")
+    
+while True:
+    modelo_pantalla = input("Modelo de la pantalla: ").strip().lower()
+    if modelo_pantalla:
+        break
+    print("El modelo de la pantalla es obligatorio.")
+    
+while True:
+    pulgadas_pantalla = input("Pulgadas de la pantalla: ").strip().lower()
+    if pulgadas_pantalla:
+        break
+    print("Las pulgadas de la pantalla son obligatorio.")
+    
+tipo_impresora = input("Tipo de la impresora (scanner, multifuncional, plotter): ").strip().lower()
+marca_impresora = input("Marca de la impresora: ").strip().lower()
+modelo_impresora = input("Modelo de la impresora: ").strip().lower()
+toner_tinta = input("Toner / tinta de la impresora: ").strip().lower()
+ip_impresora = input("IP imprespra: ").strip
     
 
 """    
@@ -179,8 +225,6 @@ print("\n===== JSON A ENVIAR =====")
 print(json.dumps(data, indent=4, ensure_ascii=False))
 print("=========================")
 
-guardar_respaldo(data, "PRE_ENVIO")
-
 try:
     respuesta = requests.post(
         url,
@@ -198,7 +242,6 @@ try:
         if respuesta_json.get("success") is True:
             print("\n El registro llegó correctamente a la base de datos.")
             print("Mensaje:", respuesta_json.get("message", "Sin mensaje"))
-            guardar_respaldo(data, "GUARDADO_OK", respuesta.text)
         else:
             print("\n El servidor respondió, pero NO guardó el registro.")
             print("Motivo:", respuesta_json.get("message", "Sin mensaje"))
