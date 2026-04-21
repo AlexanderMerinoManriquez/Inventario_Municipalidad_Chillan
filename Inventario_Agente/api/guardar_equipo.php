@@ -6,9 +6,7 @@ header('Content-Type: application/json');
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-// =============================
-// 🔒 FUNCIONES DE VALIDACIÓN
-// =============================
+
 function esInyeccion($valor) {
     return preg_match('/<[^>]+>|<!\[CDATA\[|\?>|<\?xml/i', $valor);
 }
@@ -34,9 +32,7 @@ function esTamanoValido($valor) {
     return preg_match('/^\d+(\.\d+)?\s*(GB|MB|TB)$/i', $valor);
 }
 
-// =============================
-// DATOS
-// =============================
+
 
 $id = $data["id"] ?? null;
 
@@ -51,14 +47,25 @@ $disco = $data["disco_total"] ?? "";
 $ip = $data["ip"] ?? "";
 $uuid = trim($data["uuid"] ?? "");
 $serial = $data["serial"] ?? "";
+
 $ubicacion = $data["ubicacion"] ?? "";
 $departamento_manual = $data["departamento_manual"] ?? "";
-//$datos_sticker = $data["datos_sticker"] ??"";
+
+$marca_pantalla = $data["marca_pantalla"] ?? "";
+$modelo_pantalla = $data["modelo_pantalla"] ?? "";
+$pulgadas_pantalla = $data["pulgadas_pantalla"] ?? "";
+
+$tipo_impresora = $data["tipo_impresora"] ?? "";
+$marca_impresora = $data["marca_impresora"] ?? "";
+$modelo_impresora = $data["modelo_impresora"] ?? "";
+$toner_tinta = $data ["toner_tinta"] ?? "";
+$ip_impresora = $data ["ip_impresora"] ?? "";
+
 $observaciones = $data["observaciones"] ??"";
 $codigo = $data["codigo_inventario"] ?? null;
 
 // =============================
-// 🛑 VALIDACIONES (RECHAZA DATOS)
+// VALIDACIONES (RECHAZA DATOS)
 // =============================
 
 $camposTexto = [
@@ -69,7 +76,6 @@ $camposTexto = [
     "anydesk" => $anydesk,
     "ubicacion" => $ubicacion,
     "departamento_manual" => $departamento_manual,
-    //"datos_sticker" => $datos_sticker,
     "observaciones" => $observaciones,
     "codigo_inventario" => $codigo
 ];
@@ -114,9 +120,7 @@ if (!empty($serial) && !preg_match('/^[a-zA-Z0-9\-]+$/', $serial)) {
     error("Serial inválido");
 }
 
-// =============================
-// 💣 VALIDAR DISCOS (JSON)
-// =============================
+
 
 $discos = [];
 
@@ -155,18 +159,15 @@ if (isset($data["discos"])) {
 
 $discos = json_encode($discos);
 
-// =============================
-// DEFAULTS
-// =============================
 
 if ($departamento === "") {
     $departamento = "SIN_DEFINIR";
 }
 
 // =============================
-// 🔥 UPDATE POR ID
+// UPDATE POR ID
 // =============================
-                //faltara poner en esta funcion los datos_sticker ya que de momento no se que datos se tiene en el//
+               
 if (!empty($id)) {
 
     $sql_update = "UPDATE equipos SET
@@ -180,12 +181,23 @@ if (!empty($id)) {
         ram=?,
         disco_total=?,
         ip=?,
+
         ubicacion=?,
         departamento_manual=?,
+
+        marca_pantalla=?,
+        modelo_pantalla=?,
+        pulgadas_pantalla=?,
+
+        tipo_impresora=?,
+        marca_impresora=?,
+        modelo_impresora=?,
+        toner_tinta=?,
+        ip_impresora=?,
+
         observaciones=?,
         ultimo_inventario = NOW()";
 
-            //faltara poner en esta funcion los datos_sticker ya que de momento no se que datos se tiene en el//
     $params = [
         $codigo,
         $nombre_pc,
@@ -197,12 +209,24 @@ if (!empty($id)) {
         $ram,
         $disco,
         $ip,
+
         $ubicacion,
         $departamento_manual,
+
+        $marca_pantalla,
+        $modelo_pantalla,
+        $pulgadas_pantalla,
+
+        $tipo_impresora,
+        $marca_impresora,
+        $modelo_impresora,
+        $toner_tinta,
+        $ip_impresora,
+
         $observaciones
     ];
 
-    $types = "sssssssssssss";
+    $types = "sssssssssssssssssssss";
 
     if (!empty($uuid)) {
         $sql_update .= ", uuid=?";
@@ -242,9 +266,6 @@ if (!empty($id)) {
     exit;
 }
 
-// =============================
-// 🔍 BUSCAR POR UUID + SERIAL
-// =============================
 
 $sql = "SELECT id FROM equipos WHERE uuid = ? AND serial = ? LIMIT 1";
 $stmt = $conn->prepare($sql);
@@ -253,9 +274,8 @@ $stmt->execute();
 $resultado = $stmt->get_result();
 
 // =============================
-// 🔄 SI EXISTE → UPDATE
+// SI EXISTE → UPDATE
 // =============================
-        //faltara poner en esta funcion los datos_sticker ya que de momento no se que datos se tiene en el//
 if ($resultado->num_rows > 0) {
 
     $row = $resultado->fetch_assoc();
@@ -275,8 +295,20 @@ if ($resultado->num_rows > 0) {
         ip=?,
         uuid=?,
         serial=?,
+
         ubicacion=?,
         departamento_manual=?,
+
+        marca_pantalla=?,
+        modelo_pantalla=?,
+        pulgadas_pantalla=?,
+
+        tipo_impresora=?,
+        marca_impresora=?,
+        modelo_impresora=?,
+        toner_tinta=?,
+        ip_impresora=?,
+
         observaciones=?,
         ultimo_inventario = NOW()
         WHERE id=?";
@@ -284,7 +316,7 @@ if ($resultado->num_rows > 0) {
     $stmt = $conn->prepare($sql_update);
 
     $stmt->bind_param(
-        "ssssssssssssssssi",
+        "ssssssssssssssssssssssssi",
         $codigo,
         $nombre_pc,
         $usuario,
@@ -298,9 +330,20 @@ if ($resultado->num_rows > 0) {
         $ip,
         $uuid,
         $serial,
+
         $ubicacion,
         $departamento_manual,
-       //datos_sticker,
+
+        $marca_pantalla,
+        $modelo_pantalla,
+        $pulgadas_pantalla,
+
+        $tipo_impresora,
+        $marca_impresora,
+        $modelo_impresora,
+        $toner_tinta,
+        $ip_impresora,
+
        $observaciones,
         $id
     );
@@ -316,21 +359,18 @@ if ($resultado->num_rows > 0) {
 
 }
 
-// =============================
-// ➕ INSERT
-// =============================
 
 else {
-            //faltara poner en esta funcion los datos_sticker ya que de momento no se que datos se tiene en el//
+            
     $sql_insert = "INSERT INTO equipos
-    (codigo_inventario, nombre_pc, usuario, departamento, sistema_operativo, anydesk, cpu, ram, disco_total, discos, ip, uuid, serial, ubicacion, departamento_manual, observaciones, ultimo_inventario)
+    (codigo_inventario, nombre_pc, usuario, departamento, sistema_operativo, anydesk, cpu, ram, disco_total, discos, ip, uuid, serial, ubicacion, departamento_manual, marca_pantalla, modelo_pantalla, pulgadas_pantalla, tipo_impresora, marca_impresora, modelo_impresora, toner_tinta, ip_impresora, observaciones, ultimo_inventario)
     VALUES
-    (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, NOW())";
+    (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, NOW())";
 
     $stmt = $conn->prepare($sql_insert);
 
     $stmt->bind_param(
-        "ssssssssssssssss",
+        "ssssssssssssssssssssssss",
         $codigo,
         $nombre_pc,
         $usuario,
@@ -344,9 +384,20 @@ else {
         $ip,
         $uuid,
         $serial,
+
         $ubicacion,
         $departamento_manual,
-        //$datos_sticker,
+
+        $marca_pantalla,
+        $modelo_pantalla,
+        $pulgadas_pantalla,
+
+        $tipo_impresora,
+        $marca_impresora,
+        $modelo_impresora,
+        $toner_tinta,
+        $ip_impresora,
+
         $observaciones
     );
 
@@ -363,3 +414,4 @@ else {
 $conn->close();
 
 ?>
+

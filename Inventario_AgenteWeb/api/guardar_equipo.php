@@ -300,7 +300,7 @@ else {
     $sql_insert = "INSERT INTO equipos
     (codigo_inventario, nombre_pc, usuario, departamento, sistema_operativo, anydesk, cpu, ram, disco_total, discos, ip, uuid, serial, ultimo_inventario)
     VALUES
-    (?,?,?,?,?,?,?,?,?,?,?,?, ?, NOW())";
+    (?,?,?,?,?,?,?,?,?,?,?,?, ?,NOW())";
 
     $stmt = $conn->prepare($sql_insert);
 

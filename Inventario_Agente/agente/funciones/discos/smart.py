@@ -30,7 +30,7 @@ def detectar_discos():
         if not l:
             continue
 
-        # 🚫 FILTRAR dispositivos no deseados
+    
         if "usb" in l or "cdrom" in l or "loop" in l:
             continue
 
@@ -53,7 +53,6 @@ def obtener_info_smart(device, tipo):
     errores = 0
     temperatura = None
 
-    # 🔹 Estado rápido (NO se cuelga)
     try:
         salida = subprocess.check_output(
             [ruta, "-H", device, "-d", tipo],
@@ -70,7 +69,6 @@ def obtener_info_smart(device, tipo):
     except Exception:
         return None  # si falla, ignoramos el disco
 
-    # 🔹 Datos extendidos (opcional)
     try:
         salida = subprocess.check_output(
             [ruta, "-A", device, "-d", tipo],

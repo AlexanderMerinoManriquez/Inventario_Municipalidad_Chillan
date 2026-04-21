@@ -25,7 +25,7 @@ def guardar_respaldo(data, estado, respuesta=""):
         
         fecha_archivo = datetime.now().strftime("%Y%m%d_%H%M%S")
         fecha_legible = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        nombre_pc = str(data.het("nombre_pc", "sin_nombre")).replace("", "_")
+        nombre_pc = str(data.get("nombre_pc", "sin_nombre")).replace(" ", "_")
         
         nombre_archivo = F"ERROR_{fecha_archivo}_{nombre_pc}.txt"
         ruta_respaldo = os.path.join(carpeta, nombre_archivo)
@@ -37,7 +37,7 @@ def guardar_respaldo(data, estado, respuesta=""):
         }
         
         with open (ruta_respaldo, "w", encoding="utf-8") as f:
-            json.dump(contenido, f, ensure_ascii=false, indent=4)
+            json.dump(contenido, f, ensure_ascii=False, indent=4)
             
         print("\n" + "=" * 60)
         print(" NO SE PUDO GUARDAR EN LA BASE DE DATOS")
@@ -45,7 +45,7 @@ def guardar_respaldo(data, estado, respuesta=""):
         print("LOS DATOS DEL EQUIPO FUERON GUARDADOS LOCALMENTE")
         print("-" * 60)
         
-    except exception as e:
+    except Exception as e:
         print("\n" + "=" * 60)
         print("ERROR AL INTENTAR CREAR EL RESPALDO LOCAL")
         print("detalle:", e)
@@ -114,23 +114,13 @@ while True:
     if pulgadas_pantalla:
         break
     print("Las pulgadas de la pantalla son obligatorio.")
+
     
 tipo_impresora = input("Tipo de la impresora (scanner, multifuncional, plotter): ").strip().lower()
 marca_impresora = input("Marca de la impresora: ").strip().lower()
 modelo_impresora = input("Modelo de la impresora: ").strip().lower()
 toner_tinta = input("Toner / tinta de la impresora: ").strip().lower()
-ip_impresora = input("IP imprespra: ").strip
-    
-
-"""    
-while True:
-    datos_sticker = input("datos del sticker ").strip().lower()
-    if datos_sticker:
-        break
-    print("Los datos del sticker es obligatorio")
-    
-"""
-    
+ip_impresora = input("IP imprespra: ").strip().lower()
 observaciones = input("Observaciones finales: ").strip().lower()
 if observaciones == "":
     observaciones = None
@@ -151,9 +141,20 @@ data = {
     "serial": serial,
     "discos": discos_fisicos,
     "codigo_inventario": None,
+    
     "ubicacion": ubicacion,
     "departamento_manual": departamento_manual,
-    ####"datos_sticker": datos_sticker,#####
+    
+    "marca_pantalla": marca_pantalla,
+    "modelo_pantalla": modelo_pantalla,
+    "pulgadas_pantalla": pulgadas_pantalla,
+    
+    "tipo_impresora": tipo_impresora,
+    "marca_impresora": marca_impresora,
+    "modelo_impresora": modelo_impresora,
+    "toner_tinta": toner_tinta,
+    "ip_impresora": ip_impresora,
+    
     "observaciones": observaciones
 }
 
@@ -171,7 +172,14 @@ print("UUID:", data.get("uuid", ""))
 print("Serial:", data.get("serial", ""))
 print("Ubicacion:", data.get("ubicacion", ""))
 print("Departamento manual:", data.get("departamento_manual", ""))
-########print("Datos del sticker:", data.get("datos_sticker", ""))###############
+print("Marca pantalla:", data.get("marca_pantalla", ""))
+print("Modelo pantalla", data.get("modelo_pantalla", ""))
+print("Pulgadas_pantalla", data.get("pulgadas_pantalla"))
+print("tipo_impresora", data.get("tipo_impresora"))
+print("marca_impresora", data.get("marca_impresora"))
+print("modelo_impresora", data.get("modelo_impresora"))
+print("toner_tinta", data.get("toner_tinta"))
+print("ip_impresora", data.get("ip_impresora"))
 print("Observaciones:", data.get("observaciones", ""))
 
 print("\nDiscos detectados:")

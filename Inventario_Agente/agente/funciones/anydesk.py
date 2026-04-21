@@ -13,7 +13,7 @@ def obtener_anydesk():
                 with open(ruta, "r", encoding="utf-8", errors="ignore") as f:
                     contenido = f.read()
 
-                # 🔥 Buscar múltiples formatos posibles
+               
                 patrones = [
                     r"ad\.anynet\.id=(\d+)",
                     r"ad\.telemetry\.last_cid=(\d+)"

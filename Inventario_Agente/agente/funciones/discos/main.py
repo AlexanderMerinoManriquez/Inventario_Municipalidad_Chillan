@@ -9,14 +9,13 @@ def obtener_discos_smart():
 
     c = wmi.WMI()
 
-    # 🔹 Detectar discos SMART (rápido y seguro)
     dispositivos = detectar_discos()
 
     discos = []
 
     for i, disk in enumerate(c.Win32_DiskDrive()):
 
-        # 🚫 Evitar USB
+  
         if disk.InterfaceType == "USB":
             continue
 
@@ -38,7 +37,6 @@ def obtener_discos_smart():
         temperatura = None
         tipo = "desconocido"
 
-        # 🔥 SMART (seguro con timeout)
         if i < len(dispositivos):
 
             device, tipo = dispositivos[i]
@@ -51,7 +49,7 @@ def obtener_discos_smart():
                 errores = info["errores"] or 0
                 temperatura = info["temperatura"]
 
-        # 🔹 Tu lógica original (se mantiene)
+       
         porcentaje = calcular_salud(horas, errores, temperatura)
         tipo_disco = clasificar_tipo_disco(modelo, tipo)
 
