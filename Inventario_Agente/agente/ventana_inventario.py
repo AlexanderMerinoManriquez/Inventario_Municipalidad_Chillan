@@ -1,486 +1,625 @@
-import socket
-import requests
 import json
 import os
+import socket
 from datetime import datetime
+
+import requests
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import messagebox, ttk
 from tkinter.scrolledtext import ScrolledText
 
-from funciones.permisos import admin
-from funciones.grupo_trabajo import obtener_grupo_trabajo
-from funciones.sistema_operativo import obtener_sistema
 from funciones.anydesk import obtener_anydesk
 from funciones.cpu import obtener_cpu
-from funciones.ram import obtener_ram
-from funciones.ip import obtener_ip
-from funciones.uuid import obtener_uuid
-from funciones.serial import obtener_serial
-from funciones.discos.disco import obtener_disco_principal
 from funciones.discos.main import obtener_discos_smart
 from funciones.discos.utils import obtener_ruta_smart
+from funciones.grupo_trabajo import obtener_grupo_trabajo
+from funciones.ip import obtener_ip
+from funciones.monitores import obtener_monitores
+from funciones.permisos import admin
+from funciones.ram import obtener_ram
+from funciones.serial import obtener_serial
+from funciones.sistema_operativo import obtener_sistema
+from funciones.uuid import obtener_uuid
 
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CONFIG_PATH = os.path.join(BASE_DIR, "config.txt")
+# ── Rutas ──────────────────────────────────────────────────────────────────────
+BASE_DIR      = os.path.dirname(os.path.abspath(__file__))
+CONFIG_PATH   = os.path.join(BASE_DIR, "config.txt")
 RESPALDOS_DIR = os.path.join(BASE_DIR, "RESPALDOS_FALLIDOS")
 
+# ── Campos automáticos: (clave, función, etiqueta) ────────────────────────────
+CAMPOS_AUTO = [
+    ("nombre_pc",         socket.gethostname,   "Nombre PC"),
+    ("departamento",      obtener_grupo_trabajo, "Departamento PC"),
+    ("sistema_operativo", obtener_sistema,       "Sistema operativo"),
+    ("anydesk",           obtener_anydesk,       "AnyDesk"),
+    ("cpu",               obtener_cpu,           "Procesador"),
+    ("ram",               obtener_ram,           "RAM"),
+    ("ip",                obtener_ip,            "IP"),
+    ("uuid",              obtener_uuid,          "UUID"),
+    ("serial",            obtener_serial,        "N° Serie"),
+]
 
-def guardar_respaldo(data, estado, respuesta=""):
+# ── Paleta de colores ──────────────────────────────────────────────────────────
+PALETA = {
+    "bg":             "#f0f2f5",
+    "panel":          "#ffffff",
+    "borde":          "#ced4da",
+    "primario":       "#1a56db",
+    "primario_hover": "#1048b8",
+    "peligro":        "#c0392b",
+    "texto":          "#1a1d23",
+    "texto_sub":      "#6b7280",
+    "acento":         "#e8f0fe",
+}
+
+# ── Definición de bloques dinámicos ───────────────────────────────────────────
+CAMPOS_MONITOR    = [("marca", "Marca:"), ("modelo", "Modelo:"), ("pulgadas", "Pulgadas:")]
+CAMPOS_IMPRESORA  = [("tipo", "Tipo:"), ("marca", "Marca:"), ("modelo", "Modelo:"),
+                     ("ip", "IP:"), ("toner_tinta", "Toner/tinta:")]
+
+# ── Campos obligatorios para validación ───────────────────────────────────────
+OBLIGATORIOS = {
+    "usuario":             "Funcionario responsable",
+    "registrado_por":      "Registrado por",
+    "ubicacion":           "Ubicación",
+    "departamento_manual": "Departamento / dirección",
+}
+
+
+# ── Utilidad: respaldo local ───────────────────────────────────────────────────
+def guardar_respaldo(data: dict, estado: str, respuesta: str = "") -> str:
     try:
         os.makedirs(RESPALDOS_DIR, exist_ok=True)
-
-        fecha_archivo = datetime.now().strftime("%Y%m%d_%H%M%S")
-        fecha_legible = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        nombre_pc = str(data.get("nombre_pc", "sin_nombre")).replace(" ", "_")
-
-        nombre_archivo = f"ERROR_{fecha_archivo}_{nombre_pc}.json"
-        ruta_respaldo = os.path.join(RESPALDOS_DIR, nombre_archivo)
-
-        contenido = {
-            "fecha": fecha_legible,
-            "estado": estado,
-            "respuesta_servidor": respuesta,
-            "datos_equipo": data,
-        }
-
-        with open(ruta_respaldo, "w", encoding="utf-8") as f:
-            json.dump(contenido, f, ensure_ascii=False, indent=4)
-
-        return ruta_respaldo
+        ts     = datetime.now()
+        nombre = str(data.get("nombre_pc", "sin_nombre")).replace(" ", "_")
+        ruta   = os.path.join(RESPALDOS_DIR, f"ERROR_{ts:%Y%m%d_%H%M%S}_{nombre}.json")
+        with open(ruta, "w", encoding="utf-8") as f:
+            json.dump(
+                {"fecha": ts.strftime("%Y-%m-%d %H:%M:%S"), "estado": estado,
+                 "respuesta_servidor": respuesta, "datos_equipo": data},
+                f, ensure_ascii=False, indent=4,
+            )
+        return ruta
     except Exception as e:
         return f"ERROR_AL_CREAR_RESPALDO: {e}"
 
 
+# ── Aplicación principal ───────────────────────────────────────────────────────
 class InventarioApp:
-    def __init__(self, root):
+
+    AUTO_FIELDS = [(c, e) for c, _, e in CAMPOS_AUTO]   # (clave, etiqueta)
+
+    def __init__(self, root: tk.Tk) -> None:
         self.root = root
-        self.root.title("Inventario")
-        self.root.geometry("980x760")
-        self.root.minsize(900, 680)
+        self.root.title("Sistema de Inventario — Municipalidad de Chillán")
+        self.root.geometry("1140x860")
+        self.root.minsize(1000, 740)
 
-        self.datos_auto = {}
-        self.discos_fisicos = []
+        self.fecha_hora_envio       = ""
+        self.var_fecha_hora_visible = tk.StringVar()
+        self.datos_auto             = {}
+        self.discos_fisicos         = []
+        self.monitores_detectados   = []
+        self.monitores_vars         = []
+        self.impresoras_vars        = []
+        self.auto_entries           = {}
+        self.discos_widgets         = []
 
-        self.var_usuario = tk.StringVar()
-        self.var_ubicacion = tk.StringVar()
+        self.var_usuario             = tk.StringVar()
+        self.var_registrado_por      = tk.StringVar()
+        self.var_ubicacion           = tk.StringVar()
         self.var_departamento_manual = tk.StringVar()
-        self.var_marca_pantalla = tk.StringVar()
-        self.var_modelo_pantalla = tk.StringVar()
-        self.var_pulgadas_pantalla = tk.StringVar()
-
-        self.var_tipo_impresora = tk.StringVar()
-        self.var_marca_impresora = tk.StringVar()
-        self.var_modelo_impresora = tk.StringVar()
-        self.var_toner_tinta = tk.StringVar()
-        self.var_ip_impresora = tk.StringVar()
 
         self._configurar_estilo()
         self._construir_interfaz()
         self._cargar_datos_automaticos()
 
-    def _configurar_estilo(self):
-        style = ttk.Style()
+    # ── Estilos ────────────────────────────────────────────────────────────────
+    def _configurar_estilo(self) -> None:
+        p = PALETA
+        s = ttk.Style()
         try:
-            style.theme_use("clam")
+            s.theme_use("clam")
         except Exception:
             pass
 
-        style.configure("Title.TLabel", font=("Segoe UI", 16, "bold"))
-        style.configure("Subtitle.TLabel", font=("Segoe UI", 10))
-        style.configure("Section.TLabelframe.Label", font=("Segoe UI", 10, "bold"))
-        style.configure("TLabel", font=("Segoe UI", 10))
-        style.configure("TButton", font=("Segoe UI", 10))
-        style.configure("Treeview", font=("Segoe UI", 9), rowheight=24)
-        style.configure("Treeview.Heading", font=("Segoe UI", 9, "bold"))
+        self.root.configure(bg=p["bg"])
 
-    def _construir_interfaz(self):
-        contenedor = ttk.Frame(self.root, padding=12)
+        # Fuente base
+        s.configure(".", background=p["bg"], foreground=p["texto"], font=("Segoe UI", 10))
+        s.configure("TFrame",  background=p["bg"])
+        s.configure("TLabel",  background=p["bg"], foreground=p["texto"])
+
+        # Encabezado
+        s.configure("Title.TLabel",    background=p["bg"], foreground=p["texto"],
+                    font=("Segoe UI", 17, "bold"))
+        s.configure("Subtitle.TLabel", background=p["bg"], foreground=p["texto_sub"],
+                    font=("Segoe UI", 10))
+
+        # Tarjetas / secciones
+        s.configure("Section.TLabelframe",
+                    background=p["panel"], bordercolor=p["borde"],
+                    relief="solid", borderwidth=1)
+        s.configure("Section.TLabelframe.Label",
+                    background=p["bg"], foreground=p["texto"],
+                    font=("Segoe UI", 10, "bold"))
+
+        # Campos de texto
+        s.configure("TEntry", fieldbackground=p["panel"],
+                    bordercolor=p["borde"], padding=4)
+
+        # Botón primario (Registrar)
+        s.configure("Primary.TButton",
+                    font=("Segoe UI", 10, "bold"), padding=(12, 5),
+                    background=p["primario"], foreground="white", borderwidth=0)
+        s.map("Primary.TButton",
+              background=[("active", p["primario_hover"])],
+              foreground=[("active", "white")])
+
+        # Botón normal
+        s.configure("TButton", font=("Segoe UI", 9), padding=(8, 3),
+                    background="#e2e8f0", bordercolor=p["borde"])
+        s.map("TButton", background=[("active", "#cbd5e1")])
+
+        # Botón pequeño (Editar / Quitar)
+        s.configure("Small.TButton", font=("Segoe UI", 8), padding=(5, 2),
+                    background="#e2e8f0", bordercolor=p["borde"])
+        s.map("Small.TButton", background=[("active", "#cbd5e1")])
+
+        # Botón peligro (Cancelar)
+        s.configure("Danger.TButton", font=("Segoe UI", 9), padding=(8, 3),
+                    background="#fee2e2", foreground=p["peligro"], borderwidth=0)
+        s.map("Danger.TButton", background=[("active", "#fecaca")])
+
+        # Treeview
+        s.configure("Treeview", background=p["panel"], fieldbackground=p["panel"],
+                    foreground=p["texto"], rowheight=26, font=("Segoe UI", 9))
+        s.configure("Treeview.Heading", font=("Segoe UI", 9, "bold"),
+                    background=p["acento"], foreground=p["primario"])
+        s.map("Treeview", background=[("selected", p["acento"])],
+              foreground=[("selected", p["primario"])])
+
+        # Scrollbar
+        s.configure("Vertical.TScrollbar", background=p["bg"],
+                    troughcolor=p["bg"], bordercolor=p["bg"])
+
+    # ── Interfaz principal (con scroll) ───────────────────────────────────────
+    def _construir_interfaz(self) -> None:
+        contenedor = ttk.Frame(self.root)
         contenedor.pack(fill="both", expand=True)
 
-        header = ttk.Frame(contenedor)
-        header.pack(fill="x", pady=(0, 10))
+        canvas = tk.Canvas(contenedor, highlightthickness=0, bg=PALETA["bg"])
+        sb     = ttk.Scrollbar(contenedor, orient="vertical", command=canvas.yview)
 
-        ttk.Label(header, text="Inventario", style="Title.TLabel").pack(anchor="w")
-        ttk.Label(
-            header,
-            text="sistema de invetario",
-            style="Subtitle.TLabel",
-        ).pack(anchor="w")
+        self.scroll_frame = ttk.Frame(canvas, padding=16)
+        self.scroll_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
 
-        cuerpo = ttk.Frame(contenedor)
+        self._win_id = canvas.create_window((0, 0), window=self.scroll_frame, anchor="nw")
+        canvas.configure(yscrollcommand=sb.set)
+        canvas.bind("<Configure>",
+                    lambda e: canvas.itemconfigure(self._win_id, width=e.width))
+        canvas.bind_all("<MouseWheel>",
+                        lambda e: canvas.yview_scroll(int(-1 * e.delta / 120), "units"))
+
+        canvas.pack(side="left", fill="both", expand=True)
+        sb.pack(side="right", fill="y")
+
+        # Encabezado con franja de color
+        header_wrap = tk.Frame(self.scroll_frame, bg=PALETA["primario"])
+        header_wrap.pack(fill="x", pady=(0, 16))
+        tk.Label(header_wrap, text="  Sistema de Inventario",
+                 bg=PALETA["primario"], fg="white",
+                 font=("Segoe UI", 17, "bold"), pady=10).pack(side="left")
+        tk.Label(header_wrap, text="Municipalidad de Chillán  ",
+                 bg=PALETA["primario"], fg="#93c5fd",
+                 font=("Segoe UI", 10)).pack(side="right", anchor="s", pady=12)
+
+        # Dos columnas
+        cuerpo = ttk.Frame(self.scroll_frame)
         cuerpo.pack(fill="both", expand=True)
 
-        izquierda = ttk.Frame(cuerpo)
-        izquierda.pack(side="left", fill="both", expand=True, padx=(0, 6))
+        izq = ttk.Frame(cuerpo)
+        izq.pack(side="left", fill="both", expand=True, padx=(0, 8))
+        der = ttk.Frame(cuerpo)
+        der.pack(side="left", fill="both", expand=True, padx=(8, 0))
 
-        derecha = ttk.Frame(cuerpo)
-        derecha.pack(side="left", fill="both", expand=True, padx=(6, 0))
+        self._build_auto_frame(izq)
+        self._build_monitores_frame(izq)
+        self._build_trazabilidad_frame(der)
+        self._build_manual_frame(der)
+        self._build_impresoras_frame(der)
+        self._build_observaciones_frame(der)
+        self._build_acciones_frame(der)
 
-        auto_frame = ttk.LabelFrame(
-            izquierda,
-            text="Datos detectados automáticamente",
-            style="Section.TLabelframe",
-        )
-        auto_frame.pack(fill="x", pady=(0, 10))
+    # ── Helper: crear sección (LabelFrame) ────────────────────────────────────
+    def _seccion(self, parent, titulo, *, fill="x", expand=False, pady=(0, 12)) -> ttk.LabelFrame:
+        frame = ttk.LabelFrame(parent, text=titulo, style="Section.TLabelframe")
+        frame.pack(fill=fill, expand=expand, pady=pady)
+        return frame
 
-        self.labels_auto = {}
-        campos_auto = [
-            ("nombre_pc", "Nombre PC"),
-            ("departamento", "Departamento PC"),
-            ("sistema_operativo", "Sistema operativo"),
-            ("anydesk", "Anydesk"),
-            ("cpu", "Procesador"),
-            ("ram", "RAM"),
-            ("disco_total", "Disco total"),
-            ("ip", "IP"),
-            ("uuid", "UUID"),
-            ("serial", "N°Serie"),
-        ]
-
-        for fila, (clave, texto) in enumerate(campos_auto):
-            ttk.Label(auto_frame, text=f"{texto}:").grid(
-                row=fila, column=0, sticky="w", padx=8, pady=4
-            )
-            lbl = ttk.Label(auto_frame, text="Cargando...", wraplength=320)
-            lbl.grid(row=fila, column=1, sticky="w", padx=8, pady=4)
-            self.labels_auto[clave] = lbl
-
-        auto_frame.columnconfigure(1, weight=1)
-
-        discos_frame = ttk.LabelFrame(
-            izquierda,
-            text="Discos detectados",
-            style="Section.TLabelframe",
-        )
-        discos_frame.pack(fill="both", expand=True)
-
-        columnas = ("modelo", "capacidad", "tipo", "salud", "temperatura")
-        self.tree_discos = ttk.Treeview(
-            discos_frame, columns=columnas, show="headings", height=9
-        )
-        for col in columnas:
-            self.tree_discos.heading(col, text=col.capitalize())
-            self.tree_discos.column(col, width=120, anchor="w")
-        self.tree_discos.pack(fill="both", expand=True, padx=8, pady=8)
-
-        manual_frame = ttk.LabelFrame(
-            derecha,
-            text="Datos manuales",
-            style="Section.TLabelframe",
-        )
-        manual_frame.pack(fill="x", pady=(0, 10))
-
-        self._crear_campo(manual_frame, "Funcionario:", self.var_usuario, 0)
-        self._crear_campo(manual_frame, "Ubicación:", self.var_ubicacion, 1)
-        self._crear_campo(
-            manual_frame, "Departamento de trabajo:", self.var_departamento_manual, 2
-        )
-        self._crear_campo(manual_frame, "Marca pantalla:", self.var_marca_pantalla, 3)
-        self._crear_campo(manual_frame, "Modelo pantalla:", self.var_modelo_pantalla, 4)
-        self._crear_campo(
-            manual_frame, "Pulgadas pantalla:", self.var_pulgadas_pantalla, 5
-        )
-
-        impresora_frame = ttk.LabelFrame(
-            derecha,
-            text="Datos de impresora",
-            style="Section.TLabelframe",
-        )
-        impresora_frame.pack(fill="x", pady=(0, 10))
-
-        self._crear_campo(
-            impresora_frame, "Tipo impresora:", self.var_tipo_impresora, 0
-        )
-        self._crear_campo(
-            impresora_frame, "Marca impresora:", self.var_marca_impresora, 1
-        )
-        self._crear_campo(
-            impresora_frame, "Modelo impresora:", self.var_modelo_impresora, 2
-        )
-        self._crear_campo(
-            impresora_frame, "Toner / tinta:", self.var_toner_tinta, 3
-        )
-        self._crear_campo(
-            impresora_frame, "IP impresora:", self.var_ip_impresora, 4
-        )
-
-        obs_frame = ttk.LabelFrame(
-            derecha,
-            text="Observaciones",
-            style="Section.TLabelframe",
-        )
-        obs_frame.pack(fill="both", expand=True, pady=(0, 10))
-
-        self.txt_observaciones = ScrolledText(
-            obs_frame, height=8, wrap="word", font=("Segoe UI", 10)
-        )
-        self.txt_observaciones.pack(fill="both", expand=True, padx=8, pady=8)
-
-        acciones = ttk.Frame(derecha)
-        acciones.pack(fill="x")
-
-        ttk.Button(acciones, text="Ver resumen", command=self.mostrar_resumen).pack(
-            side="left", padx=(0, 8)
-        )
-        ttk.Button(acciones, text="Enviar", command=self.enviar_datos).pack(
-            side="left", padx=(0, 8)
-        )
-        ttk.Button(acciones, text="Salir", command=self.root.destroy).pack(side="right")
-
-        self.lbl_estado = ttk.Label(derecha, text="Estado: listo", anchor="w")
-        self.lbl_estado.pack(fill="x", pady=(10, 0))
-
-    def _crear_campo(self, parent, texto, variable, fila):
+    # ── Helper: fila etiqueta + entry ─────────────────────────────────────────
+    def _campo(self, parent, texto: str, variable: tk.StringVar,
+               fila: int, width: int = 30, readonly: bool = False) -> ttk.Entry:
         ttk.Label(parent, text=texto).grid(
-            row=fila, column=0, sticky="w", padx=8, pady=6
-        )
-        entry = ttk.Entry(parent, textvariable=variable, width=40)
-        entry.grid(row=fila, column=1, sticky="ew", padx=8, pady=6)
+            row=fila, column=0, sticky="w", padx=10, pady=5)
+        state = "readonly" if readonly else "normal"
+        entry = ttk.Entry(parent, textvariable=variable, width=width, state=state)
+        entry.grid(row=fila, column=1, sticky="ew", padx=10, pady=5)
         parent.columnconfigure(1, weight=1)
         return entry
 
-    def _cargar_datos_automaticos(self):
-        self.lbl_estado.config(text="Estado: cargando datos automáticos...")
-        self.root.update_idletasks()
+    # ── Secciones de la interfaz ───────────────────────────────────────────────
+    def _build_auto_frame(self, parent) -> None:
+        frame = self._seccion(parent, "Datos detectados automáticamente",
+                              fill="both", expand=False)
+        self.auto_frame = frame
 
+        for fila, (clave, texto) in enumerate(self.AUTO_FIELDS):
+            ttk.Label(frame, text=f"{texto}:").grid(
+                row=fila, column=0, sticky="w", padx=10, pady=4)
+            var   = tk.StringVar(value="Cargando…")
+            entry = ttk.Entry(frame, textvariable=var, width=34, state="readonly")
+            entry.grid(row=fila, column=1, sticky="ew", padx=10, pady=4)
+            ttk.Button(frame, text="Editar", style="Small.TButton",
+                       command=lambda e=entry: self._habilitar_entry(e)
+                       ).grid(row=fila, column=2, padx=(4, 8), pady=4)
+            self.auto_entries[clave] = {"var": var, "entry": entry}
+
+        frame.columnconfigure(1, weight=1)
+        self.fila_discos_inicio = len(self.AUTO_FIELDS)
+
+    def _build_trazabilidad_frame(self, parent) -> None:
+        frame = self._seccion(parent, "Trazabilidad")
+        ttk.Label(frame, text="Fecha y hora:").grid(
+            row=0, column=0, sticky="w", padx=10, pady=6)
+        ttk.Label(frame, textvariable=self.var_fecha_hora_visible,
+                  foreground=PALETA["primario"], font=("Segoe UI", 10, "bold")
+                  ).grid(row=0, column=1, sticky="w", padx=10, pady=6)
+        self._campo(frame, "Registrado por:", self.var_registrado_por, 1, width=28)
+        self._actualizar_reloj()
+
+    def _build_manual_frame(self, parent) -> None:
+        frame = self._seccion(parent, "Datos manuales principales")
+        self._campo(frame, "Funcionario responsable:", self.var_usuario, 0)
+        self._campo(frame, "Ubicación:",               self.var_ubicacion, 1)
+        self._campo(frame, "Departamento/dirección:",  self.var_departamento_manual, 2)
+
+    def _build_monitores_frame(self, parent) -> None:
+        frame = self._seccion(parent, "Monitores asociados")
+        ttk.Button(frame, text="＋ Agregar monitor", style="Small.TButton",
+                   command=self._crear_bloque_monitor).pack(anchor="w", padx=10, pady=8)
+        self.monitores_container = ttk.Frame(frame)
+        self.monitores_container.pack(fill="x", padx=10, pady=(0, 8))
+
+    def _build_impresoras_frame(self, parent) -> None:
+        frame = self._seccion(parent, "Impresoras asociadas")
+        ttk.Button(frame, text="＋ Agregar impresora", style="Small.TButton",
+                   command=self._crear_bloque_impresora).pack(anchor="w", padx=10, pady=8)
+        self.impresoras_container = ttk.Frame(frame)
+        self.impresoras_container.pack(fill="x", padx=10, pady=(0, 8))
+
+    def _build_observaciones_frame(self, parent) -> None:
+        frame = self._seccion(parent, "Observaciones", fill="both", expand=True)
+        self.txt_observaciones = ScrolledText(
+            frame, height=7, wrap="word", font=("Segoe UI", 10),
+            relief="flat", borderwidth=0, background=PALETA["panel"])
+        self.txt_observaciones.pack(fill="both", expand=True, padx=10, pady=8)
+
+    def _build_acciones_frame(self, parent) -> None:
+        sep = tk.Frame(parent, bg=PALETA["borde"], height=1)
+        sep.pack(fill="x", pady=(8, 10))
+
+        frame = ttk.Frame(parent)
+        frame.pack(fill="x")
+
+        ttk.Button(frame, text="Ver resumen",
+                   command=self.mostrar_resumen).pack(side="left", padx=(0, 6))
+        ttk.Button(frame, text="Registrar", style="Primary.TButton",
+                   command=self.enviar_datos).pack(side="left")
+        ttk.Button(frame, text="Cancelar", style="Danger.TButton",
+                   command=self.root.destroy).pack(side="right")
+
+        self.lbl_estado = ttk.Label(parent, text="Estado: listo",
+                                    foreground=PALETA["texto_sub"],
+                                    font=("Segoe UI", 9))
+        self.lbl_estado.pack(fill="x", pady=(10, 0))
+
+    # ── Helpers de edición ─────────────────────────────────────────────────────
+    def _actualizar_reloj(self) -> None:
+        self.var_fecha_hora_visible.set(datetime.now().strftime("%Y-%m-%d  %H:%M"))
+        self.root.after(1000, self._actualizar_reloj)
+
+    def _habilitar_entry(self, entry: ttk.Entry) -> None:
+        """Habilita un entry de solo lectura y lo bloquea al perder el foco."""
+        entry.config(state="normal")
+        entry.focus_set()
+        def _bloquear(_=None):
+            entry.config(state="readonly")
+        entry.unbind("<FocusOut>")
+        entry.unbind("<Return>")
+        entry.bind("<FocusOut>", _bloquear, add="+")
+        entry.bind("<Return>",   _bloquear, add="+")
+
+    def _habilitar_grupo(self, entries: dict) -> None:
+        """Habilita un grupo de entries (bloque monitor/impresora)."""
+        lista = list(entries.values())
+        for e in lista:
+            e.config(state="normal")
+        if lista:
+            lista[0].focus_set()
+
+        def _revisar(_=None):
+            def _bloquear_si_salio():
+                if self.root.focus_get() not in lista:
+                    for e in lista:
+                        e.config(state="readonly")
+            self.root.after_idle(_bloquear_si_salio)
+
+        for e in lista:
+            e.unbind("<FocusOut>")
+            e.unbind("<Return>")
+            e.bind("<FocusOut>", _revisar, add="+")
+            e.bind("<Return>",   _revisar, add="+")
+
+    def _get_auto(self, clave: str) -> str:
+        item = self.auto_entries.get(clave)
+        return item["var"].get().strip() if item else ""
+
+    # ── Discos en el panel automático ─────────────────────────────────────────
+    def _mostrar_discos_en_auto_frame(self) -> None:
+        for w in self.discos_widgets:
+            w.destroy()
+        self.discos_widgets.clear()
+
+        for fila_offset, disco in enumerate(self.discos_fisicos):
+            tipo     = str(disco.get("tipo", "") or "Disco").strip()
+            capacidad = str(disco.get("capacidad", "") or "").strip()
+            if not capacidad:
+                continue
+
+            fila = self.fila_discos_inicio + fila_offset
+            lbl  = ttk.Label(self.auto_frame, text=f"{tipo}:")
+            lbl.grid(row=fila, column=0, sticky="w", padx=10, pady=4)
+
+            entry = ttk.Entry(self.auto_frame, width=34, state="normal")
+            entry.insert(0, capacidad)
+            entry.config(state="readonly")
+            entry.grid(row=fila, column=1, sticky="ew", padx=10, pady=4)
+
+            btn = ttk.Button(self.auto_frame, text="Editar", style="Small.TButton",
+                             command=lambda e=entry: self._habilitar_entry(e))
+            btn.grid(row=fila, column=2, padx=(4, 8), pady=4)
+
+            self.discos_widgets.extend([lbl, entry, btn])
+
+    # ── Bloques dinámicos genérico ─────────────────────────────────────────────
+    def _quitar_bloque(self, frame, lista: list, renumerar) -> None:
+        if len(lista) == 1:
+            return
+        lista[:] = [item for item in lista if item["frame"] != frame]
+        frame.destroy()
+        renumerar()
+
+    def _crear_bloque(self, container, lista: list, titulo: str,
+                      campos: list, renumerar, datos: dict = None,
+                      readonly: bool = False) -> None:
+        datos = datos or {}
+        frame = ttk.LabelFrame(container, text=f"{titulo} {len(lista) + 1}",
+                               style="Section.TLabelframe")
+        frame.pack(fill="x", pady=6)
+
+        vars_   = {k: tk.StringVar(value=str(datos.get(k, "")).lower()) for k, _ in campos}
+        entries = {k: self._campo(frame, lbl, vars_[k], i, width=22, readonly=readonly)
+                   for i, (k, lbl) in enumerate(campos)}
+
+        # Botones en columna 2
+        btn_row = 0
+        if readonly:
+            ttk.Button(frame, text="Editar", style="Small.TButton",
+                       command=lambda e=entries: self._habilitar_grupo(e)
+                       ).grid(row=btn_row, column=2, padx=(4, 8), pady=4)
+            btn_row += 1
+
+        ttk.Button(frame, text="Quitar", style="Small.TButton",
+                   command=lambda f=frame: self._quitar_bloque(f, lista, renumerar)
+                   ).grid(row=btn_row, column=2, padx=(4, 8), pady=4)
+
+        lista.append({"frame": frame, "entries": entries, **vars_})
+
+    def _crear_bloque_monitor(self, datos: dict = None) -> None:
+        self._crear_bloque(self.monitores_container, self.monitores_vars,
+                           "Monitor", CAMPOS_MONITOR,
+                           self._renumerar_monitores, datos, readonly=True)
+
+    def _crear_bloque_impresora(self, datos: dict = None) -> None:
+        self._crear_bloque(self.impresoras_container, self.impresoras_vars,
+                           "Impresora", CAMPOS_IMPRESORA,
+                           self._renumerar_impresoras, datos, readonly=False)
+
+    def _renumerar_monitores(self) -> None:
+        for i, item in enumerate(self.monitores_vars, 1):
+            item["frame"].configure(text=f"Monitor {i}")
+
+    def _renumerar_impresoras(self) -> None:
+        for i, item in enumerate(self.impresoras_vars, 1):
+            item["frame"].configure(text=f"Impresora {i}")
+
+    # ── Carga automática ───────────────────────────────────────────────────────
+    def _cargar_datos_automaticos(self) -> None:
+        self.lbl_estado.config(text="Estado: cargando datos automáticos…",
+                               foreground=PALETA["texto_sub"])
+        self.root.update_idletasks()
         errores = []
-        self.datos_auto = {}
 
         try:
             admin()
         except Exception as e:
             errores.append(f"admin(): {e}")
 
-        try:
-            self.datos_auto["nombre_pc"] = socket.gethostname()
-        except Exception as e:
-            self.datos_auto["nombre_pc"] = "ERROR"
-            errores.append(f"socket.gethostname(): {e}")
+        for clave, fn, _ in CAMPOS_AUTO:
+            try:
+                self.datos_auto[clave] = fn()
+            except Exception as e:
+                self.datos_auto[clave] = "ERROR"
+                errores.append(f"{clave}: {e}")
+            self.auto_entries[clave]["var"].set(str(self.datos_auto[clave]))
 
         try:
-            self.datos_auto["departamento"] = obtener_grupo_trabajo()
-        except Exception as e:
-            self.datos_auto["departamento"] = "ERROR"
-            errores.append(f"obtener_grupo_trabajo(): {e}")
-
-        try:
-            self.datos_auto["sistema_operativo"] = obtener_sistema()
-        except Exception as e:
-            self.datos_auto["sistema_operativo"] = "ERROR"
-            errores.append(f"obtener_sistema(): {e}")
-
-        try:
-            self.datos_auto["anydesk"] = obtener_anydesk()
-        except Exception as e:
-            self.datos_auto["anydesk"] = "ERROR"
-            errores.append(f"obtener_anydesk(): {e}")
-
-        try:
-            self.datos_auto["cpu"] = obtener_cpu()
-        except Exception as e:
-            self.datos_auto["cpu"] = "ERROR"
-            errores.append(f"obtener_cpu(): {e}")
-
-        try:
-            self.datos_auto["ram"] = obtener_ram()
-        except Exception as e:
-            self.datos_auto["ram"] = "ERROR"
-            errores.append(f"obtener_ram(): {e}")
-
-        try:
-            self.datos_auto["disco_total"] = obtener_disco_principal()
-        except Exception as e:
-            self.datos_auto["disco_total"] = "ERROR"
-            errores.append(f"obtener_disco_principal(): {e}")
-
-        try:
-            self.datos_auto["ip"] = obtener_ip()
-        except Exception as e:
-            self.datos_auto["ip"] = "ERROR"
-            errores.append(f"obtener_ip(): {e}")
-
-        try:
-            self.datos_auto["uuid"] = obtener_uuid()
-        except Exception as e:
-            self.datos_auto["uuid"] = "ERROR"
-            errores.append(f"obtener_uuid(): {e}")
-
-        try:
-            self.datos_auto["serial"] = obtener_serial()
-        except Exception as e:
-            self.datos_auto["serial"] = "ERROR"
-            errores.append(f"obtener_serial(): {e}")
-
-        try:
-            _ = obtener_ruta_smart()
+            obtener_ruta_smart()
             self.discos_fisicos = obtener_discos_smart()
         except Exception as e:
             self.discos_fisicos = []
-            errores.append(f"obtener_discos_smart()/obtener_ruta_smart(): {e}")
+            errores.append(f"discos_smart: {e}")
 
-        for clave, valor in self.datos_auto.items():
-            if clave in self.labels_auto:
-                self.labels_auto[clave].config(text=str(valor))
+        try:
+            self.monitores_detectados = obtener_monitores()
+        except Exception as e:
+            self.monitores_detectados = []
+            errores.append(f"monitores: {e}")
 
-        for item in self.tree_discos.get_children():
-            self.tree_discos.delete(item)
+        self._mostrar_discos_en_auto_frame()
 
-        for disco in self.discos_fisicos:
-            self.tree_discos.insert(
-                "",
-                "end",
-                values=(
-                    disco.get("modelo", ""),
-                    disco.get("capacidad", ""),
-                    disco.get("tipo", ""),
-                    disco.get("salud", ""),
-                    disco.get("temperatura", ""),
-                ),
-            )
+        for m in self.monitores_detectados:
+            self._crear_bloque_monitor(m)
+        if not self.monitores_vars:
+            self._crear_bloque_monitor()
+        if not self.impresoras_vars:
+            self._crear_bloque_impresora()
 
         if errores:
-            self.lbl_estado.config(text="Estado: carga parcial con errores")
-            messagebox.showwarning(
-                "Carga parcial",
+            self.lbl_estado.config(text="Estado: carga parcial con errores",
+                                   foreground="#d97706")
+            messagebox.showwarning("Carga parcial",
                 "La ventana abrió, pero algunos datos automáticos fallaron:\n\n"
-                + "\n".join(errores),
-            )
+                + "\n".join(errores))
         else:
-            self.lbl_estado.config(text="Estado: datos automáticos cargados")
+            self.lbl_estado.config(text="Estado: datos automáticos cargados ✓",
+                                   foreground="#16a34a")
 
-    def construir_payload(self):
-        observaciones = self.txt_observaciones.get("1.0", "end").strip().lower()
-        if observaciones == "":
-            observaciones = None
-
+    # ── Payload ────────────────────────────────────────────────────────────────
+    def construir_payload(self) -> dict:
+        obs = self.txt_observaciones.get("1.0", "end").strip().lower() or None
+        monitores  = [{k: item[k].get().strip().lower()
+                       for k in ("marca", "modelo", "pulgadas")}
+                      for item in self.monitores_vars]
+        impresoras = [{k: item[k].get().strip().lower()
+                       for k in ("tipo", "marca", "modelo", "ip", "toner_tinta")}
+                      for item in self.impresoras_vars]
         return {
-            **self.datos_auto,
-            "usuario": self.var_usuario.get().strip().lower(),
-            "discos": self.discos_fisicos,
-            "codigo_inventario": None,
-            "ubicacion": self.var_ubicacion.get().strip().lower(),
+            **{c: self._get_auto(c) for c, _ in self.AUTO_FIELDS},
+            "usuario":             self.var_usuario.get().strip().lower(),
+            "registrado_por":      self.var_registrado_por.get().strip().lower(),
+            "fecha_hora_registro": self.fecha_hora_envio
+                                   or datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "discos":              self.discos_fisicos,
+            "codigo_inventario":   None,
+            "ubicacion":           self.var_ubicacion.get().strip().lower(),
             "departamento_manual": self.var_departamento_manual.get().strip().lower(),
-            "marca_pantalla": self.var_marca_pantalla.get().strip().lower(),
-            "modelo_pantalla": self.var_modelo_pantalla.get().strip().lower(),
-            "pulgadas_pantalla": self.var_pulgadas_pantalla.get().strip().lower(),
-            "tipo_impresora": self.var_tipo_impresora.get().strip().lower() or None,
-            "marca_impresora": self.var_marca_impresora.get().strip().lower() or None,
-            "modelo_impresora": self.var_modelo_impresora.get().strip().lower() or None,
-            "toner_tinta": self.var_toner_tinta.get().strip().lower() or None,
-            "ip_impresora": self.var_ip_impresora.get().strip().lower() or None,
-            "observaciones": observaciones,
+            "monitores":           monitores,
+            "impresoras":          impresoras,
+            "observaciones":       obs,
         }
 
-    def validar_payload(self, payload):
-        obligatorios = {
-            "usuario": "Funcionario",
-            "ubicacion": "Ubicación",
-            "departamento_manual": "Departamento del dispositivo",
-            "marca_pantalla": "Marca de pantalla",
-            "modelo_pantalla": "Modelo de pantalla",
-            "pulgadas_pantalla": "Pulgadas de pantalla",
-        }
+    # ── Validación ─────────────────────────────────────────────────────────────
+    def validar_payload(self, payload: dict) -> bool:
+        faltantes = [nombre for clave, nombre in OBLIGATORIOS.items()
+                     if not payload.get(clave)]
 
-        faltantes = [
-            nombre for clave, nombre in obligatorios.items() if not payload.get(clave)
-        ]
+        if not any(m.get("marca") or m.get("modelo") or m.get("pulgadas")
+                   for m in payload["monitores"]):
+            faltantes.append("Al menos un monitor con datos")
+
+        if not any(i.get("tipo") or i.get("marca") or i.get("modelo")
+                   for i in payload["impresoras"]):
+            faltantes.append("Al menos una impresora con datos")
+
         if faltantes:
-            messagebox.showwarning(
-                "Faltan datos",
-                "Completa estos campos obligatorios:\n\n- " + "\n- ".join(faltantes),
-            )
+            messagebox.showwarning("Faltan datos",
+                "Completa estos campos obligatorios:\n\n- " + "\n- ".join(faltantes))
             return False
-
         return True
 
-    def mostrar_resumen(self):
+    # ── Resumen ────────────────────────────────────────────────────────────────
+    def mostrar_resumen(self) -> None:
         payload = self.construir_payload()
         if not self.validar_payload(payload):
             return
-
-        ventana = tk.Toplevel(self.root)
-        ventana.title("Resumen del inventario")
-        ventana.geometry("760x620")
-
-        txt = ScrolledText(ventana, wrap="word", font=("Consolas", 10))
-        txt.pack(fill="both", expand=True, padx=10, pady=10)
+        win = tk.Toplevel(self.root)
+        win.title("Resumen del inventario")
+        win.geometry("780x640")
+        win.configure(bg=PALETA["bg"])
+        txt = ScrolledText(win, wrap="word", font=("Consolas", 10),
+                           background=PALETA["panel"], relief="flat")
+        txt.pack(fill="both", expand=True, padx=12, pady=12)
         txt.insert("1.0", json.dumps(payload, indent=4, ensure_ascii=False))
         txt.config(state="disabled")
 
-    def enviar_datos(self):
+    # ── Envío ──────────────────────────────────────────────────────────────────
+    def enviar_datos(self) -> None:
+        self.fecha_hora_envio = datetime.now().strftime("%Y-%m-%d %H:%M")
         payload = self.construir_payload()
         if not self.validar_payload(payload):
             return
-
-        confirmar = messagebox.askyesno(
-            "Confirmar envío",
-            "¿Deseas enviar este inventario a la base de datos?",
-        )
-        if not confirmar:
+        if not messagebox.askyesno("Confirmar registro",
+                                   "¿Confirmas el envío de este inventario?"):
             return
 
         try:
-            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-                url = f.read().strip()
+            url = open(CONFIG_PATH, encoding="utf-8").read().strip()
         except Exception as e:
-            messagebox.showerror("Error", f"No se encontró config.txt\n\nDetalle: {e}")
+            messagebox.showerror("Error de configuración",
+                                 f"No se encontró config.txt\n\n{e}")
             return
 
-        self.lbl_estado.config(text="Estado: enviando datos...")
+        self.lbl_estado.config(text="Estado: enviando datos…",
+                               foreground=PALETA["primario"])
         self.root.update_idletasks()
 
         try:
-            respuesta = requests.post(
-                url,
-                json=payload,
-                headers={"ngrok-skip-browser-warning": "true"},
-                timeout=60,
-            )
-
+            resp = requests.post(url, json=payload,
+                                 headers={"ngrok-skip-browser-warning": "true"},
+                                 timeout=60)
             try:
-                respuesta_json = respuesta.json()
+                rj = resp.json()
             except Exception:
-                ruta = guardar_respaldo(payload, "RESPUESTA_NO_JSON", respuesta.text)
-                messagebox.showerror(
-                    "Respuesta inválida",
-                    f"El servidor respondió, pero no devolvió JSON válido.\n\nRespaldo: {ruta}",
-                )
-                self.lbl_estado.config(text="Estado: error, respuesta no JSON")
+                ruta = guardar_respaldo(payload, "RESPUESTA_NO_JSON", resp.text)
+                messagebox.showerror("Respuesta inválida",
+                    f"El servidor no devolvió JSON válido.\n\nRespaldo guardado en:\n{ruta}")
+                self.lbl_estado.config(text="Estado: error — respuesta no JSON",
+                                       foreground=PALETA["peligro"])
                 return
 
-            if respuesta_json.get("success") is True:
-                messagebox.showinfo(
-                    "Éxito",
-                    f"Registro guardado correctamente.\n\nMensaje: {respuesta_json.get('message', 'Sin mensaje')}",
-                )
-                self.lbl_estado.config(text="Estado: guardado correctamente")
+            if rj.get("success") is True:
+                messagebox.showinfo("Registro exitoso",
+                    f"El equipo fue registrado correctamente.\n\n{rj.get('message', '')}")
+                self.lbl_estado.config(text="Estado: registrado correctamente ✓",
+                                       foreground="#16a34a")
             else:
-                ruta = guardar_respaldo(payload, "ERROR_SERVIDOR", respuesta.text)
-                messagebox.showerror(
-                    "No se guardó",
-                    f"El servidor respondió, pero no guardó el registro.\n\nMotivo: {respuesta_json.get('message', 'Sin mensaje')}\n\nRespaldo: {ruta}",
-                )
-                self.lbl_estado.config(text="Estado: error de servidor")
+                ruta = guardar_respaldo(payload, "ERROR_SERVIDOR", resp.text)
+                messagebox.showerror("Error del servidor",
+                    f"Motivo: {rj.get('message', 'Sin mensaje')}\n\nRespaldo:\n{ruta}")
+                self.lbl_estado.config(text="Estado: error del servidor",
+                                       foreground=PALETA["peligro"])
 
         except requests.exceptions.RequestException as e:
             ruta = guardar_respaldo(payload, "ERROR_ENVIO", str(e))
-            messagebox.showerror(
-                "Error de envío",
-                f"No se pudo enviar el registro.\n\nDetalle: {e}\n\nRespaldo: {ruta}",
-            )
-            self.lbl_estado.config(text="Estado: fallo de envío")
+            messagebox.showerror("Error de conexión",
+                f"No se pudo conectar con el servidor.\n\n{e}\n\nRespaldo:\n{ruta}")
+            self.lbl_estado.config(text="Estado: sin conexión",
+                                   foreground=PALETA["peligro"])
 
 
-def main():
+# ── Punto de entrada ───────────────────────────────────────────────────────────
+def main() -> None:
     try:
         root = tk.Tk()
-        app = InventarioApp(root)
+        InventarioApp(root)
         root.mainloop()
-    except Exception as e:
+    except Exception:
         import traceback
-        print("ERROR AL INICIAR LA VENTANA:")
-        print(traceback.format_exc())
+        print("ERROR AL INICIAR:\n", traceback.format_exc())
         input("Presiona ENTER para salir...")
 
 
