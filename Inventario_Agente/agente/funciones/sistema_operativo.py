@@ -25,3 +25,4 @@ def obtener_sistema():
     finally:
         if key:
             winreg.CloseKey(key)
+            
