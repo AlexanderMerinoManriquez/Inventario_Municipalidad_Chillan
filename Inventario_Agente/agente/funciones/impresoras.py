@@ -76,6 +76,26 @@ def _extraer_ip(puerto: str) -> str:
     match = re.search(r"\b(\d{1,3}(?:\.\d{1,3}){3})\b", puerto)
     return match.group(1) if match else ""
 
+def _sugerir_consumible(nombre: str, driver: str, modelo: str = "") -> str:
+    base = f"{nombre} {driver} {modelo}".lower()
+
+    palabras_toner = (
+        "laserjet", "laser", "mfp", "mfcl", "hl-", "ecosys",
+        "workcentre", "imageclass", "bizhub", "ricoh", "xerox"
+    )
+    palabras_tinta = (
+        "ink", "inkjet", "ecotank", "deskjet", "officejet",
+        "stylus", "expression", "pixma", "tank"
+    )
+    
+    if any(p in base for p in palabras_toner):
+        return "tóner"
+
+    if any(p in base for p in palabras_tinta):
+        return "tinta"
+    
+    return ""
+
 
 def obtener_impresoras_activas() -> list[dict]:
     script = r"""
@@ -109,14 +129,15 @@ $printers | ConvertTo-Json -Compress
                 continue
 
             marca = _inferir_marca(nombre, driver)
+            modelo = _inferir_modelo(nombre, driver, marca).lower()
+
             resultado.append({
                 "tipo": _inferir_tipo(nombre, driver),
                 "marca": marca.lower(),
-                "modelo": _inferir_modelo(nombre, driver, marca).lower(),
+                "modelo": modelo,
                 "ip": _extraer_ip(puerto),
-                "toner_tinta": "",
+                "toner_tinta": _sugerir_consumible(nombre, driver, modelo),
             })
-
         unicas = []
         vistos = set()
         for imp in resultado:
