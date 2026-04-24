@@ -53,6 +53,152 @@ OBLIGATORIOS = {
     "departamento_manual": "Departamento / dirección",
 }
 
+DEPARTAMENTOS_UBICACION = {
+    "ADMINISTRACION": "Dieciocho de Septiembre 510",
+    "ADM-INFORMATICA": "Dieciocho de Septiembre 510",
+    "ADM-EVENTOSRECREATIVOS": "Dieciocho de Septiembre 510",
+    "ADM-PSICOSOCIAL": "Dieciocho de Septiembre 510",
+    "ADM-TRANSPARENCIA": "Dieciocho de Septiembre 510",
+    "ADM-VIGILANTES": "Dieciocho de Septiembre 510",
+    "ADM-ORGANISMO DE SEGURIDAD INTERNO": "Dieciocho de Septiembre 510",
+    "CONCEJO": "Dieciocho de Septiembre 510",
+    "CONTROL": "Dieciocho de Septiembre 510",
+    "DAF": "Dieciocho de Septiembre 510",
+    "DAF-RENTAS": "Dieciocho de Septiembre 510",
+    "DAF-R.R.H.H.": "Dieciocho de Septiembre 510",
+    "DAF-TESORERIA": "Dieciocho de Septiembre 510",
+    "DAF-ADQUISICIONES": "Dieciocho de Septiembre 510",
+    "DAF-CONTABILIDAD": "Dieciocho de Septiembre 510",
+    "DAF-COBRANZAS": "Dieciocho de Septiembre 510",
+    "DAF-BIENESTAR": "Dieciocho de Septiembre 510",
+    "DAF-GESTION DE PAGO": "Dieciocho de Septiembre 510",
+    "DAF-HONORARIOS": "Dieciocho de Septiembre 510",
+    "DAF-CONVENIOS": "Dieciocho de Septiembre 510",
+    "DAF-INVENTARIO": "Dieciocho de Septiembre 510",
+    "DAF-PREVENCION DE RIESGO": "Dieciocho de Septiembre 510",
+    "JURIDICA": "Dieciocho de Septiembre 510",
+    "OFICINA DE PARTES": "Dieciocho de Septiembre 510",
+    "SECRETARIA MUNICIPAL": "Dieciocho de Septiembre 510",
+    "SUREFI": "Dieciocho de Septiembre 510",
+    "TRANSPARENCIA EXTERNA": "Dieciocho de Septiembre 510",
+    "ALCALDIA": "Dieciocho de Septiembre 510",
+    "ALCALDIA-COMUNICACIONES": "Dieciocho de Septiembre 510",
+    "ALCALDIA-REDES SOCIALES": "Dieciocho de Septiembre 510",
+    "RELACIONES PUBLICAS": "Dieciocho de Septiembre 510",
+    "PROTOCOLO": "Dieciocho de Septiembre 510",
+    "GABINETE": "Dieciocho de Septiembre 510",
+    "CASCHILE": "Dieciocho de Septiembre 510",
+
+    "DIDECO": "Arauco 983",
+    "DIDECO-CHILE CRECE CONTIGO": "Arauco 983",
+    "DIDECO-VIVIENDA": "Arauco 983",
+    "DIDECO-HABITABILIDAD": "Arauco 983",
+    "DIDECO-4 A 7": "Arauco 983",
+    "DIDECO-JEFAS DE HOGAR": "Arauco 983",
+    "DIDECO-VINCULOS": "Arauco 983",
+    "DIDECO-ESTRATIFICACION SOCIAL": "Arauco 983",
+    "DIDECO-OOCC": "Arauco 983",
+    "DIDECO-COMUNICACIONES": "Arauco 983",
+    "DIDECO-CENTRO DE LA MUJER": "Arauco 983",
+    "DIDECO-MUJER SEXUALIDAD Y MATERNIDAD": "Arauco 983",
+    "DIDECO-CASA DE ACOGIDA": "Arauco 983",
+    "DIDECO-ASISTENCIA SOCIAL": "Arauco 983",
+    "DIDECO-PROGRAMA CALLE": "Arauco 983",
+    "DIDECO-PROGRAMA FAMILIAS": "Arauco 983",
+    "DIDECO-EMPODERAMIENTO DESARROLLO INTEGRAL": "Arauco 983",
+    "DIDECO-OMAJ": "Arauco 983",
+    "DIDECO-SUBISDIOS ESTATALES Y PENSIONES": "Arauco 983",
+    "DIDECO-SUBSIDIOS ESTATALES": "Arauco 983",
+    "DIDECO- PREVENCIÓN DE LA VIOLENCIA": "Arauco 983",
+    "DIDECO-ADULTO MAYOR": "Arauco 983",
+    "DIDECO-CENTRO DIURNO": "Arauco 983",
+    "DIDECO-RESIDENCIA TRANSITORIA": "Arauco 983",
+    "DIDECO-SUBSIDIOS Y PENSIONES": "Arauco 983",
+    "DIDECO-ORGANIZACIONES COMUNITARIAS": "Arauco 983",
+    "DIDECO-CONTROL Y GESTION Y LOGISTICA": "Arauco 983",
+    "DIDECO-REGISTRO SOCIAL DE HOGARES": "Arauco 983",
+    "DIDECO-BECAS": "Arauco 983",
+    "DIDECO-OFICINA DE LA DIVERSIDAD SOCIAL Y CULTURAL": "Arauco 983",
+    "DIDECO-MUJERES JEFAS DE HOGAR": "Arauco 983",
+    "DIDECO-MUJERES DERECHOS SEXUALES Y REPRODUCTIVOS": "Arauco 983",
+    "PROGRAMA DE PREVENCION DE LA VIOLENCIA DE GENERO": "Arauco 983",
+    "DIDECO-RED LOCAL DE APOYOS Y CIUDADANOS": "Arauco 983",
+    "DIDECO-DISCAPACIDAD": "Arauco 983",
+    "DIDECO-OMAR": "Arauco 983",
+    "DIDECO-EMERGENCIAS SOCIALES": "Arauco 983",
+    "DIDECO-CONSULTORIO JURIDICO": "Arauco 983",
+    "DIDECO-DERECHO DE ASEO": "Arauco 983",
+    "DIDECO-SERNAC": "Arauco 983",
+    "DIDECO-BIENES NACIONALES MUNICIPAL": "Arauco 983",
+    "DIDECO-PROGRAMA APOYO A LA SEGURIDAD ALIMENTARIA": "Arauco 983",
+    "DIDECO-ASENTAMIENTOS PRECARIOS(CAMPAMENTOS)": "Arauco 983",
+    "DIDECO-PROGRAMA DE ACOMPAÑAMIENTO INTEGRAL FAMILIAR": "Arauco 983",
+    "DIDECO-OFICINA DE MEDIACION": "Arauco 983",
+
+    "OBRAS": "Avenida Libertad 431, Interior",
+    "OBRAS-DEPTO ELECTRICO": "Avenida Libertad 431, Interior",
+    "OBRAS-EDIFICACIÓN": "Avenida Libertad 431, Interior",
+    "OBRAS-VIAL": "Avenida Libertad 431, Interior",
+    "OBRAS-VIAL ELECTRICOS": "Avenida Libertad 431, Interior",
+    "OBRAS-SUBDIVISION Y LOTEO": "Avenida Libertad 431, Interior",
+    "OBRAS-EJECUCION": "Avenida Libertad 431, Interior",
+
+    "DIDEPRO": "Claudio Arrau 602",
+    "DESARROLLO ECON. Y PRODUCTIVO": "Claudio Arrau 602",
+    "OMIL": "Claudio Arrau 602",
+    "DIDEPRO-OMIL": "Claudio Arrau 602",
+    "DIDEPRO-PRODESAL": "Claudio Arrau 602",
+    "DIDEPRO-COWORK": "Claudio Arrau 602",
+
+    "ASEO": "Sepúlveda Labbé 109",
+    "ASEO-ORNATO": "Sepúlveda Labbé 109",
+    "ASEO-AREAS VERDES": "Sepúlveda Labbé 109",
+    "ASEO-DIMENSION": "Sepúlveda Labbé 109",
+    "ASEO-MEDIO AMBIENTE": "Sepúlveda Labbé 109",
+    "ASEO-CENTRO VETERINARIO": "Sepúlveda Labbé 109",
+    "ASEO-MEJORAMIENTO DE ESPACIOS PÚBLICOS": "Sepúlveda Labbé 109",
+
+    "SEGURIDAD PUBLICA": "Pedro Aguirre Cerda 297",
+    "SEGURIDAD PUBLICA - OPERADOR DE CAMARAS": "Pedro Aguirre Cerda 297",
+    "SEGURIDAD PUBLICA-APARCADERO MUNICIPAL": "Pedro Aguirre Cerda 297",
+    "INSPECCION": "Pedro Aguirre Cerda 297",
+    "INSPECCION-JUSTICIA VECINAL": "Pedro Aguirre Cerda 297",
+    "ADM-EMERGENCIA": "Pedro Aguirre Cerda 297",
+    "SUREFI-ESTADIO": "Pedro Aguirre Cerda 297",
+
+    "SECPLA": "Herminda Martín 563",
+    "SECPLA - QUIERO MI BARRIO": "Herminda Martín 563",
+    "SECPLA - PARTICIPACION CIUDADANA": "Herminda Martín 563",
+
+    "CULTURA": "Herminda Martín 579",
+    "CULTURA-CENTRO CULTURAL": "Herminda Martín 579",
+    "CULTURA-BIBLIOTECA": "Arauco 974",
+    "CULTURA-MUSEO ARRAU": "Claudio Arrau 558",
+    "CULTURA-MUSEO CIENCIAS NATURALES": "Pedro Aguirre Cerda s/n",
+    "CULTURA-ESCUELA ARTISTICA": "Arauco 356",
+
+    "EDUCACION": "Rosas 530",
+    "SALUD": "Herminda Martín 557",
+    "SALUD-FINANZAS": "Herminda Martín 557",
+    "TRANSITO": "Maipón 277",
+    "TRANSITO-LICENCIAS": "Maipón 277",
+    "1ER JPL": "Avenida Ecuador 317",
+    "2DO JPL": "Avenida Ecuador 429",
+    "DEPORTE Y RECREACION": "5 de Abril 535",
+    "DEPORTES Y RECREACION": "5 de Abril 535",
+    "TURISMO": "Dieciocho de Septiembre 510",
+    "DIDECO-HOSPEDERIA": "Avenida O´Higgins 1290",
+    "SEGURIDAD PUBLICA - 24 HRS": "Avenida Libertad 374",
+    "DIDECO-OPD": "Gamero 318",
+    "INSPECCION-SENDA": "Claudio Arrau 718",
+    "SUREFI-CENTRO DEPORTIVO QUILAMAPU": "Paul Harris con Flores Millán",
+    "CEMENTERIO": "Sepúlveda Bustos s/n",
+    "ADM-MERCADO": "Arturo Prat 605",
+    "DELEGACION QUINCHAMALI": "Camino a Quinchamalí s/n",
+    "DELEGACIÓN ORIENTE": "Avenida Nueva Oriente con Alonso de Ercilla",
+    "EXTERIOR": "Sin dirección fija",
+}
+
 # ── Paleta institucional ───────────────────────────────────────────────────────
 C = {
     "rojo":        "#C8102E",   # color oficial Municipalidad de Chillán
@@ -87,6 +233,91 @@ def guardar_respaldo(data: dict, estado: str, respuesta: str = "") -> str:
         return ruta
     except Exception as e:
         return f"ERROR_AL_CREAR_RESPALDO: {e}"
+    
+class AutocompleteEntry(ttk.Entry):
+    def __init__(self, parent, opciones, on_select=None, **kwargs):
+        self.var = kwargs.get("textvariable") or tk.StringVar()
+        kwargs["textvariable"] = self.var
+        super().__init__(parent, **kwargs)
+
+        self.opciones = sorted(opciones)
+        self.on_select = on_select
+        self.listbox = None
+
+        self.var.trace_add("write", self._filtrar)
+        self.bind("<Down>", self._focus_lista)
+        self.bind("<Return>", self._seleccionar_primero)
+        self.bind("<Escape>", lambda e: self._cerrar_lista())
+
+    def _filtrar(self, *_):
+        texto = self.var.get().strip().lower()
+
+        if not texto:
+            self._cerrar_lista()
+            return
+
+        coincidencias = [x for x in self.opciones if texto in x.lower()]
+
+        if not coincidencias:
+            self._cerrar_lista()
+            return
+
+        if self.listbox is None:
+            self.listbox = tk.Listbox(
+                self.master,
+                height=min(8, len(coincidencias)),
+                font=("Segoe UI", 9),
+                activestyle="dotbox",
+            )
+            self.listbox.bind("<<ListboxSelect>>", self._seleccionar_evento)
+            self.listbox.bind("<Return>", self._seleccionar_evento)
+            self.listbox.bind("<Escape>", lambda e: self._cerrar_lista())
+
+        self.listbox.delete(0, tk.END)
+
+        for item in coincidencias:
+            self.listbox.insert(tk.END, item)
+
+        self.listbox.place(
+            x=self.winfo_x(),
+            y=self.winfo_y() + self.winfo_height(),
+            width=self.winfo_width(),
+        )
+        self.listbox.lift()
+
+    def _focus_lista(self, _=None):
+        if self.listbox:
+            self.listbox.focus_set()
+            self.listbox.selection_set(0)
+            self.listbox.activate(0)
+
+    def _seleccionar_primero(self, _=None):
+        if self.listbox and self.listbox.size() > 0:
+            self._set_valor(self.listbox.get(0))
+            return "break"
+
+    def _seleccionar_evento(self, _=None):
+        if not self.listbox:
+            return
+
+        seleccion = self.listbox.curselection()
+        if not seleccion:
+            return
+
+        self._set_valor(self.listbox.get(seleccion[0]))
+
+    def _set_valor(self, valor):
+        self.var.set(valor)
+        self.icursor("end")
+        self._cerrar_lista()
+
+        if self.on_select:
+            self.on_select(valor)
+
+    def _cerrar_lista(self):
+        if self.listbox:
+            self.listbox.destroy()
+            self.listbox = None
 
 
 # ── Aplicación principal ───────────────────────────────────────────────────────
@@ -277,6 +508,31 @@ class InventarioApp:
         entry.grid(row=fila, column=1, sticky="ew", padx=(0, 10), pady=5)
         parent.columnconfigure(1, weight=1)
         return entry
+    
+    def _campo_departamento_autocomplete(self, parent, fila: int) -> ttk.Entry:
+        ttk.Label(
+            parent,
+            text="Departamento / dirección:",
+            foreground=C["gris_sub"],
+            font=("Segoe UI", 9),
+        ).grid(row=fila, column=0, sticky="w", padx=(10, 6), pady=5)
+
+        entry = AutocompleteEntry(
+            parent,
+            opciones=list(DEPARTAMENTOS_UBICACION.keys()),
+            textvariable=self.var_departamento_manual,
+            on_select=self._seleccionar_departamento,
+            width=30,
+        )
+        entry.grid(row=fila, column=1, sticky="ew", padx=(0, 10), pady=5)
+
+        parent.columnconfigure(1, weight=1)
+        return entry
+
+
+    def _seleccionar_departamento(self, departamento: str) -> None:
+        ubicacion = DEPARTAMENTOS_UBICACION.get(departamento.strip(), "")
+        self.var_ubicacion.set(ubicacion)
 
     # ── Sección: datos automáticos ────────────────────────────────────────────
     def _build_auto_frame(self, parent) -> None:
@@ -341,9 +597,18 @@ class InventarioApp:
     # ── Sección: datos manuales ───────────────────────────────────────────────
     def _build_manual_frame(self, parent) -> None:
         frame = self._seccion(parent, "Datos del equipo y ubicación")
+
         self._campo(frame, "Funcionario responsable:", self.var_usuario, 0)
-        self._campo(frame, "Ubicación:",               self.var_ubicacion, 1)
-        self._campo(frame, "Departamento / dirección:", self.var_departamento_manual, 2)
+
+        self.entry_departamento = self._campo_departamento_autocomplete(frame, 1)
+
+        self.entry_ubicacion = self._campo(
+            frame,
+            "Ubicación:",
+            self.var_ubicacion,
+            2,
+            readonly=True,
+        )
 
     # ── Sección: monitores ────────────────────────────────────────────────────
     def _build_monitores_frame(self, parent) -> None:
