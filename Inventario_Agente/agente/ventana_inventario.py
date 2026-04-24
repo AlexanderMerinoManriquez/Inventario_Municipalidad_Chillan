@@ -88,7 +88,6 @@ DEPARTAMENTOS_UBICACION = {
     "PROTOCOLO": "Dieciocho de Septiembre 510",
     "GABINETE": "Dieciocho de Septiembre 510",
     "CASCHILE": "Dieciocho de Septiembre 510",
-
     "DIDECO": "Arauco 983",
     "DIDECO-CHILE CRECE CONTIGO": "Arauco 983",
     "DIDECO-VIVIENDA": "Arauco 983",
@@ -134,7 +133,6 @@ DEPARTAMENTOS_UBICACION = {
     "DIDECO-ASENTAMIENTOS PRECARIOS(CAMPAMENTOS)": "Arauco 983",
     "DIDECO-PROGRAMA DE ACOMPAÑAMIENTO INTEGRAL FAMILIAR": "Arauco 983",
     "DIDECO-OFICINA DE MEDIACION": "Arauco 983",
-
     "OBRAS": "Avenida Libertad 431, Interior",
     "OBRAS-DEPTO ELECTRICO": "Avenida Libertad 431, Interior",
     "OBRAS-EDIFICACIÓN": "Avenida Libertad 431, Interior",
@@ -142,14 +140,12 @@ DEPARTAMENTOS_UBICACION = {
     "OBRAS-VIAL ELECTRICOS": "Avenida Libertad 431, Interior",
     "OBRAS-SUBDIVISION Y LOTEO": "Avenida Libertad 431, Interior",
     "OBRAS-EJECUCION": "Avenida Libertad 431, Interior",
-
     "DIDEPRO": "Claudio Arrau 602",
     "DESARROLLO ECON. Y PRODUCTIVO": "Claudio Arrau 602",
     "OMIL": "Claudio Arrau 602",
     "DIDEPRO-OMIL": "Claudio Arrau 602",
     "DIDEPRO-PRODESAL": "Claudio Arrau 602",
     "DIDEPRO-COWORK": "Claudio Arrau 602",
-
     "ASEO": "Sepúlveda Labbé 109",
     "ASEO-ORNATO": "Sepúlveda Labbé 109",
     "ASEO-AREAS VERDES": "Sepúlveda Labbé 109",
@@ -157,7 +153,6 @@ DEPARTAMENTOS_UBICACION = {
     "ASEO-MEDIO AMBIENTE": "Sepúlveda Labbé 109",
     "ASEO-CENTRO VETERINARIO": "Sepúlveda Labbé 109",
     "ASEO-MEJORAMIENTO DE ESPACIOS PÚBLICOS": "Sepúlveda Labbé 109",
-
     "SEGURIDAD PUBLICA": "Pedro Aguirre Cerda 297",
     "SEGURIDAD PUBLICA - OPERADOR DE CAMARAS": "Pedro Aguirre Cerda 297",
     "SEGURIDAD PUBLICA-APARCADERO MUNICIPAL": "Pedro Aguirre Cerda 297",
@@ -165,18 +160,15 @@ DEPARTAMENTOS_UBICACION = {
     "INSPECCION-JUSTICIA VECINAL": "Pedro Aguirre Cerda 297",
     "ADM-EMERGENCIA": "Pedro Aguirre Cerda 297",
     "SUREFI-ESTADIO": "Pedro Aguirre Cerda 297",
-
     "SECPLA": "Herminda Martín 563",
     "SECPLA - QUIERO MI BARRIO": "Herminda Martín 563",
     "SECPLA - PARTICIPACION CIUDADANA": "Herminda Martín 563",
-
     "CULTURA": "Herminda Martín 579",
     "CULTURA-CENTRO CULTURAL": "Herminda Martín 579",
     "CULTURA-BIBLIOTECA": "Arauco 974",
     "CULTURA-MUSEO ARRAU": "Claudio Arrau 558",
     "CULTURA-MUSEO CIENCIAS NATURALES": "Pedro Aguirre Cerda s/n",
     "CULTURA-ESCUELA ARTISTICA": "Arauco 356",
-
     "EDUCACION": "Rosas 530",
     "SALUD": "Herminda Martín 557",
     "SALUD-FINANZAS": "Herminda Martín 557",
@@ -201,18 +193,30 @@ DEPARTAMENTOS_UBICACION = {
 
 # ── Paleta institucional ───────────────────────────────────────────────────────
 C = {
-    "rojo":        "#C8102E",   # color oficial Municipalidad de Chillán
-    "rojo_hover":  "#a00d23",
-    "rojo_light":  "#fce8ec",
-    "blanco":      "#ffffff",
-    "gris_bg":     "#f4f6f9",
-    "gris_panel":  "#ffffff",
-    "gris_borde":  "#dde3ec",
-    "gris_sub":    "#6b7a99",
-    "texto":       "#1a2035",
-    "verde":       "#16783a",
-    "amarillo":    "#b45309",
-    "sombra":      "#e2e8f0",
+    "rojo":              "#C8102E",
+    "rojo_hover":        "#a00d23",
+    "rojo_light":        "#fce8ec",
+    "rojo_dark":         "#8b0a1f",
+    "blanco":            "#ffffff",
+    "gris_bg":           "#f0f2f7",
+    "gris_borde":        "#dde3ec",
+    "gris_sub":          "#6b7a99",
+    "gris_placeholder":  "#a0aec0",
+    "texto":             "#1a2035",
+    "texto_claro":       "#4a5568",
+    "verde":             "#16783a",
+    "verde_light":       "#e8f5ee",
+    "amarillo":          "#b45309",
+    "amarillo_light":    "#fef3c7",
+    "azul_acento":       "#2563eb",
+    "sombra":            "#e2e8f0",
+    "badge_bg":          "#eef2ff",
+    "badge_fg":          "#3730a3",
+    "label_claro":       "#6f8fb3",
+    "gris_panel":        "#f9fafb",
+    "dropdown_sel":      "#fff0f3",
+    "dropdown_sel_fg":   "#C8102E",
+    "dropdown_hover":    "#f5f7ff",
 }
 
 
@@ -225,99 +229,127 @@ def guardar_respaldo(data: dict, estado: str, respuesta: str = "") -> str:
         ruta   = os.path.join(RESPALDOS_DIR, f"ERROR_{ts:%Y%m%d_%H%M%S}_{nombre}.json")
         with open(ruta, "w", encoding="utf-8") as f:
             json.dump({
-                "fecha": ts.strftime("%Y-%m-%d %H:%M:%S"),
-                "estado": estado,
+                "fecha":              ts.strftime("%Y-%m-%d %H:%M:%S"),
+                "estado":             estado,
                 "respuesta_servidor": respuesta,
-                "datos_equipo": data,
+                "datos_equipo":       data,
             }, f, ensure_ascii=False, indent=4)
         return ruta
     except Exception as e:
         return f"ERROR_AL_CREAR_RESPALDO: {e}"
-    
-class AutocompleteEntry(ttk.Entry):
-    def __init__(self, parent, opciones, on_select=None, **kwargs):
-        self.var = kwargs.get("textvariable") or tk.StringVar()
-        kwargs["textvariable"] = self.var
-        super().__init__(parent, **kwargs)
+
+
+# ── Formateo de capacidad ──────────────────────────────────────────────────────
+def formatear_capacidad(valor: str) -> str:
+    texto  = str(valor or "").strip().replace(",", ".")
+    partes = texto.split()
+    if not partes:
+        return texto
+    try:
+        numero = float(partes[0])
+        unidad = partes[1].upper() if len(partes) > 1 else "GB"
+        return f"{round(numero)} {unidad}"
+    except Exception:
+        return texto
+
+
+# ── Dropdown con búsqueda inline ───────────────────────────────────────────────
+class BuscadorDepartamento(tk.Frame):
+    MIN_CHARS = 2
+    MAX_RESULTADOS = 8
+
+    def __init__(self, parent, opciones, variable, on_select=None):
+        super().__init__(parent, bg=C["gris_panel"])
 
         self.opciones = sorted(opciones)
+        self.variable = variable
         self.on_select = on_select
-        self.listbox = None
 
-        self.var.trace_add("write", self._filtrar)
-        self.bind("<Down>", self._focus_lista)
-        self.bind("<Return>", self._seleccionar_primero)
-        self.bind("<Escape>", lambda e: self._cerrar_lista())
+        self.var_buscar = tk.StringVar(value=variable.get())
 
-    def _filtrar(self, *_):
-        texto = self.var.get().strip().lower()
+        self.entry = ttk.Entry(self, textvariable=self.var_buscar)
+        self.entry.pack(fill="x")
+
+        self.lista = tk.Listbox(
+            self,
+            height=0,
+            font=("Segoe UI", 9),
+            activestyle="none",
+            bg=C["blanco"],
+            fg=C["texto"],
+            selectbackground=C["rojo"],
+            selectforeground=C["blanco"],
+            borderwidth=1,
+            relief="solid",
+        )
+        self.lista.pack(fill="x", pady=(3, 0))
+        self.lista.pack_forget()
+
+        self.var_buscar.trace_add("write", lambda *_: self._filtrar())
+        self.lista.bind("<ButtonRelease-1>", lambda e: self._seleccionar())
+        self.lista.bind("<Return>", lambda e: self._seleccionar())
+        self.entry.bind("<Return>", lambda e: self._seleccionar_primero())
+        self.entry.bind("<Escape>", lambda e: self._ocultar_lista())
+
+    def _normalizar(self, texto: str) -> str:
+        tabla = str.maketrans("áéíóúÁÉÍÓÚüÜñÑ", "aeiouAEIOUuUnN")
+        return texto.translate(tabla).replace("-", " ").lower()
+
+    def _filtrar(self):
+        texto = self._normalizar(self.var_buscar.get().strip())
 
         if not texto:
-            self._cerrar_lista()
+            self.variable.set("")
+            if self.on_select:
+                self.on_select("")
+            self._ocultar_lista()
             return
 
-        coincidencias = [x for x in self.opciones if texto in x.lower()]
-
-        if not coincidencias:
-            self._cerrar_lista()
+        if len(texto) < self.MIN_CHARS:
+            self._ocultar_lista()
             return
 
-        if self.listbox is None:
-            self.listbox = tk.Listbox(
-                self.master,
-                height=min(8, len(coincidencias)),
-                font=("Segoe UI", 9),
-                activestyle="dotbox",
-            )
-            self.listbox.bind("<<ListboxSelect>>", self._seleccionar_evento)
-            self.listbox.bind("<Return>", self._seleccionar_evento)
-            self.listbox.bind("<Escape>", lambda e: self._cerrar_lista())
+        palabras = texto.split()
 
-        self.listbox.delete(0, tk.END)
+        resultados = [
+            dep for dep in self.opciones
+            if all(p in self._normalizar(dep) for p in palabras)
+        ][:self.MAX_RESULTADOS]
 
-        for item in coincidencias:
-            self.listbox.insert(tk.END, item)
+        self.lista.delete(0, tk.END)
 
-        self.listbox.place(
-            x=self.winfo_x(),
-            y=self.winfo_y() + self.winfo_height(),
-            width=self.winfo_width(),
-        )
-        self.listbox.lift()
+        if not resultados:
+            self._ocultar_lista()
+            return
 
-    def _focus_lista(self, _=None):
-        if self.listbox:
-            self.listbox.focus_set()
-            self.listbox.selection_set(0)
-            self.listbox.activate(0)
+        for dep in resultados:
+            self.lista.insert(tk.END, dep)
 
-    def _seleccionar_primero(self, _=None):
-        if self.listbox and self.listbox.size() > 0:
-            self._set_valor(self.listbox.get(0))
+        self.lista.config(height=len(resultados))
+        self.lista.pack(fill="x", pady=(3, 0))
+
+    def _seleccionar_primero(self):
+        if self.lista.size() > 0:
+            self.lista.selection_clear(0, tk.END)
+            self.lista.selection_set(0)
+            self._seleccionar()
             return "break"
 
-    def _seleccionar_evento(self, _=None):
-        if not self.listbox:
-            return
-
-        seleccion = self.listbox.curselection()
+    def _seleccionar(self):
+        seleccion = self.lista.curselection()
         if not seleccion:
             return
 
-        self._set_valor(self.listbox.get(seleccion[0]))
-
-    def _set_valor(self, valor):
-        self.var.set(valor)
-        self.icursor("end")
-        self._cerrar_lista()
+        valor = self.lista.get(seleccion[0])
+        self.var_buscar.set(valor)
+        self.variable.set(valor)
+        self._ocultar_lista()
 
         if self.on_select:
             self.on_select(valor)
 
-    def _cerrar_lista(self):
-        if self.listbox:
-            self.listbox.destroy()
-            self.listbox = None
+    def _ocultar_lista(self):
+        self.lista.pack_forget()
 
 
 # ── Aplicación principal ───────────────────────────────────────────────────────
@@ -328,17 +360,17 @@ class InventarioApp:
     def __init__(self, root: tk.Tk) -> None:
         self.root = root
         self.root.title("Sistema de Inventario — Municipalidad de Chillán")
-        self.root.geometry("1180x880")
+        self.root.geometry("1200x900")
         self.root.minsize(1020, 740)
         self.root.configure(bg=C["gris_bg"])
 
-        # Icono de ventana
         try:
             icon = tk.PhotoImage(file=ICON_PATH)
             self.root.iconphoto(True, icon)
         except Exception:
             pass
 
+        # Estado interno
         self.fecha_hora_envio       = ""
         self.var_fecha_hora_visible = tk.StringVar()
         self.datos_auto             = {}
@@ -350,6 +382,7 @@ class InventarioApp:
         self.discos_widgets         = []
         self.discos_entries         = []
 
+        # Variables de formulario
         self.var_usuario             = tk.StringVar()
         self.var_registrado_por      = tk.StringVar()
         self.var_ubicacion           = tk.StringVar()
@@ -369,8 +402,8 @@ class InventarioApp:
 
         s.configure(".", background=C["gris_bg"], foreground=C["texto"],
                     font=("Segoe UI", 10))
-        s.configure("TFrame", background=C["gris_bg"])
-        s.configure("TLabel", background=C["gris_bg"], foreground=C["texto"])
+        s.configure("TFrame",  background=C["gris_bg"])
+        s.configure("TLabel",  background=C["gris_bg"], foreground=C["texto"])
 
         s.configure("Section.TLabelframe",
                     background=C["gris_panel"], bordercolor=C["gris_borde"],
@@ -379,14 +412,15 @@ class InventarioApp:
                     background=C["gris_bg"], foreground=C["rojo"],
                     font=("Segoe UI", 10, "bold"))
 
-        s.configure("TEntry", fieldbackground=C["gris_panel"],
+        s.configure("TEntry",
+                    fieldbackground=C["gris_panel"],
                     bordercolor=C["gris_borde"], padding=6)
 
         s.configure("Primary.TButton",
-                    font=("Segoe UI", 10, "bold"), padding=(20, 8),
+                    font=("Segoe UI", 10, "bold"), padding=(22, 9),
                     background=C["rojo"], foreground="white", borderwidth=0)
         s.map("Primary.TButton",
-              background=[("active", C["rojo_hover"])],
+              background=[("active", C["rojo_hover"]), ("pressed", C["rojo_dark"])],
               foreground=[("active", "white")])
 
         s.configure("TButton", font=("Segoe UI", 9), padding=(10, 4),
@@ -397,21 +431,27 @@ class InventarioApp:
                     background="#eaeff6", bordercolor=C["gris_borde"])
         s.map("Small.TButton", background=[("active", "#d8e2ef")])
 
-        s.configure("Danger.TButton", font=("Segoe UI", 10), padding=(20, 8),
+        s.configure("Danger.TButton", font=("Segoe UI", 10), padding=(22, 9),
                     background=C["rojo_light"], foreground=C["rojo"], borderwidth=0)
         s.map("Danger.TButton", background=[("active", "#f9cdd4")])
 
+        s.configure("Edit.TButton", font=("Segoe UI", 8), padding=(5, 3),
+                    background=C["badge_bg"], foreground=C["badge_fg"], borderwidth=0)
+        s.map("Edit.TButton",
+              background=[("active", "#dde7ff")],
+              foreground=[("active", C["azul_acento"])])
+
         s.configure("Vertical.TScrollbar",
-                    background=C["gris_bg"], troughcolor=C["gris_bg"],
+                    background=C["gris_bg"], troughcolor=C["sombra"],
                     bordercolor=C["gris_bg"], arrowsize=12)
 
     # ── Interfaz con scroll ────────────────────────────────────────────────────
     def _construir_interfaz(self) -> None:
-        outer = ttk.Frame(self.root)
+        outer  = ttk.Frame(self.root)
         outer.pack(fill="both", expand=True)
 
         canvas = tk.Canvas(outer, highlightthickness=0, bg=C["gris_bg"])
-        sb = ttk.Scrollbar(outer, orient="vertical", command=canvas.yview)
+        sb     = ttk.Scrollbar(outer, orient="vertical", command=canvas.yview)
 
         self.scroll_frame = ttk.Frame(canvas, padding=20)
         self.scroll_frame.bind("<Configure>",
@@ -448,59 +488,53 @@ class InventarioApp:
     # ── Header institucional ───────────────────────────────────────────────────
     def _build_header(self) -> None:
         header = tk.Frame(self.scroll_frame, bg=C["rojo"], bd=0)
-        header.pack(fill="x", pady=(0, 20))
+        header.pack(fill="x", pady=(0, 22))
+        tk.Frame(header, bg=C["rojo_dark"], height=4).pack(fill="x")
 
-        # Franja decorativa superior
-        stripe = tk.Frame(header, bg=C["rojo_hover"], height=4)
-        stripe.pack(fill="x")
-
-        inner = tk.Frame(header, bg=C["rojo"], padx=18, pady=14)
+        inner = tk.Frame(header, bg=C["rojo"], padx=20, pady=16)
         inner.pack(fill="x")
 
-        # Intentar cargar el banner
         banner_loaded = False
         try:
             banner_img = tk.PhotoImage(file=BANNER_PATH)
-            # Escalar si es necesario (aprox 260px de ancho)
-            w, h = banner_img.width(), banner_img.height()
+            w = banner_img.width()
             if w > 260:
-                factor = max(1, round(w / 260))
-                banner_img = banner_img.subsample(factor, factor)
-            lbl_banner = tk.Label(inner, image=banner_img, bg=C["rojo"], bd=0)
-            lbl_banner.image = banner_img   # evitar GC
-            lbl_banner.pack(side="left", padx=(0, 18))
+                banner_img = banner_img.subsample(max(1, round(w / 260)))
+            lbl = tk.Label(inner, image=banner_img, bg=C["rojo"], bd=0)
+            lbl.image = banner_img
+            lbl.pack(side="left", padx=(0, 20))
             banner_loaded = True
         except Exception:
             pass
 
-        # Si no cargó banner, mostrar texto fallback
         if not banner_loaded:
             tk.Label(inner, text="Municipalidad de Chillán",
                      bg=C["rojo"], fg=C["blanco"],
                      font=("Segoe UI", 18, "bold")).pack(side="left")
 
-        # Separador vertical
-        tk.Frame(inner, bg="#e8849a", width=1).pack(
-            side="left", fill="y", padx=(0, 18))
-        
-        # Texto derecho
-        txt_frame = tk.Frame(inner, bg=C["rojo"])
-        txt_frame.pack(side="left", fill="y")
-        tk.Label(txt_frame,text="Sistema de Inventario de Equipos",bg=C["rojo"],fg=C["blanco"],font=("Segoe UI", 14, "bold"),anchor="w",).pack(anchor="w")
-        tk.Label(txt_frame,text="Registro y seguimiento de activos tecnológicos municipales",bg=C["rojo"],fg="#f8c0cc",font=("Segoe UI", 9),anchor="w",).pack(anchor="w", pady=(2, 0))
+        tk.Frame(inner, bg="#e8849a", width=1).pack(side="left", fill="y", padx=(0, 20))
 
-    # ── Helper: sección ────────────────────────────────────────────────────────
+        txt = tk.Frame(inner, bg=C["rojo"])
+        txt.pack(side="left", fill="y")
+        tk.Label(txt, text="Sistema de Inventario de Equipos",
+                 bg=C["rojo"], fg="#ffe5ea",
+                 font=("Segoe UI", 14, "bold")).pack(anchor="w")
+        tk.Label(txt, text="Registro y seguimiento de activos tecnológicos municipales",
+                 bg=C["rojo"], fg="#ffd6de",
+                 font=("Segoe UI", 9)).pack(anchor="w", pady=(3, 0))
+
+    # ── Helper: sección card ───────────────────────────────────────────────────
     def _seccion(self, parent, titulo, *, fill="x", expand=False,
                  pady=(0, 14)) -> ttk.LabelFrame:
         frame = ttk.LabelFrame(parent, text=f"  {titulo}",
-                               style="Section.TLabelframe", padding=8)
+                               style="Section.TLabelframe", padding=10)
         frame.pack(fill=fill, expand=expand, pady=pady)
         return frame
 
     # ── Helper: fila etiqueta + entry ─────────────────────────────────────────
     def _campo(self, parent, texto: str, variable: tk.StringVar,
                fila: int, width: int = 30, readonly: bool = False) -> ttk.Entry:
-        ttk.Label(parent, text=texto, foreground=C["gris_sub"],
+        ttk.Label(parent, text=texto, foreground=C["label_claro"],
                   font=("Segoe UI", 9)).grid(
             row=fila, column=0, sticky="w", padx=(10, 6), pady=5)
         entry = ttk.Entry(parent, textvariable=variable, width=width,
@@ -508,31 +542,24 @@ class InventarioApp:
         entry.grid(row=fila, column=1, sticky="ew", padx=(0, 10), pady=5)
         parent.columnconfigure(1, weight=1)
         return entry
-    
-    def _campo_departamento_autocomplete(self, parent, fila: int) -> ttk.Entry:
-        ttk.Label(
-            parent,
-            text="Departamento / dirección:",
-            foreground=C["gris_sub"],
-            font=("Segoe UI", 9),
-        ).grid(row=fila, column=0, sticky="w", padx=(10, 6), pady=5)
 
-        entry = AutocompleteEntry(
-            parent,
-            opciones=list(DEPARTAMENTOS_UBICACION.keys()),
-            textvariable=self.var_departamento_manual,
-            on_select=self._seleccionar_departamento,
-            width=30,
-        )
-        entry.grid(row=fila, column=1, sticky="ew", padx=(0, 10), pady=5)
+    # ── Helper: campo ubicación editable ──────────────────────────────────────
+    def _campo_ubicacion(self, parent, fila: int) -> ttk.Entry:
+        ttk.Label(parent, text="Ubicación:", foreground=C["label_claro"],
+                  font=("Segoe UI", 9)).grid(
+            row=fila, column=0, sticky="w", padx=(10, 6), pady=5)
 
-        parent.columnconfigure(1, weight=1)
+        inner = ttk.Frame(parent)
+        inner.grid(row=fila, column=1, sticky="ew", padx=(0, 10), pady=5)
+        inner.columnconfigure(0, weight=1)
+
+        entry = ttk.Entry(inner, textvariable=self.var_ubicacion, state="readonly")
+        entry.grid(row=0, column=0, sticky="ew", padx=(0, 6))
+
+        ttk.Button(inner, text="✎ Editar", style="Small.TButton",
+                   command=lambda: self._habilitar_grupo_generico([entry])
+                   ).grid(row=0, column=1)
         return entry
-
-
-    def _seleccionar_departamento(self, departamento: str) -> None:
-        ubicacion = DEPARTAMENTOS_UBICACION.get(departamento.strip(), "")
-        self.var_ubicacion.set(ubicacion)
 
     # ── Sección: datos automáticos ────────────────────────────────────────────
     def _build_auto_frame(self, parent) -> None:
@@ -553,8 +580,7 @@ class InventarioApp:
 
         ttk.Button(frame, text="✎ Editar", style="Small.TButton",
                    command=self._editar_bloque_automatico).grid(
-            row=0, column=2,
-            rowspan=max(1, len(self.AUTO_FIELDS)),
+            row=0, column=2, rowspan=max(1, len(self.AUTO_FIELDS)),
             padx=(4, 8), pady=4, sticky="n")
         frame.columnconfigure(1, weight=1)
 
@@ -585,37 +611,64 @@ class InventarioApp:
     # ── Sección: trazabilidad ─────────────────────────────────────────────────
     def _build_trazabilidad_frame(self, parent) -> None:
         frame = self._seccion(parent, "Trazabilidad del registro")
+
         ttk.Label(frame, text="Fecha y hora:", foreground=C["gris_sub"],
                   font=("Segoe UI", 9)).grid(
             row=0, column=0, sticky="w", padx=(10, 6), pady=5)
-        ttk.Label(frame, textvariable=self.var_fecha_hora_visible,
-                  foreground=C["rojo"], font=("Segoe UI", 10, "bold")).grid(
-            row=0, column=1, sticky="w", padx=(0, 10), pady=5)
+
+        reloj = tk.Frame(frame, bg=C["gris_panel"])
+        reloj.grid(row=0, column=1, sticky="w", padx=(0, 10), pady=5)
+        tk.Label(reloj, text="●", bg=C["gris_panel"], fg=C["rojo"],
+                 font=("Segoe UI", 9, "bold")).pack(side="left", padx=(0, 6))
+        tk.Label(reloj, textvariable=self.var_fecha_hora_visible,
+                 bg=C["gris_panel"], fg=C["rojo"],
+                 font=("Segoe UI", 10, "bold")).pack(side="left")
+
         self._campo(frame, "Registrado por:", self.var_registrado_por, 1, width=28)
+        frame.columnconfigure(1, weight=1)
         self._actualizar_reloj()
 
-    # ── Sección: datos manuales ───────────────────────────────────────────────
+    # ── Sección: datos manuales con dropdown inline ───────────────────────────
     def _build_manual_frame(self, parent) -> None:
         frame = self._seccion(parent, "Datos del equipo y ubicación")
 
         self._campo(frame, "Funcionario responsable:", self.var_usuario, 0)
+        
+        # Etiqueta departamento
+        ttk.Label(frame, text="Departamento / dirección:", foreground=C["label_claro"],
+                  font=("Segoe UI", 9)).grid(
+            row=1, column=0, sticky="nw", padx=(10, 6), pady=5)
 
-        self.entry_departamento = self._campo_departamento_autocomplete(frame, 1)
-
-        self.entry_ubicacion = self._campo(
+        # Dropdown buscable inline
+        self.buscador_departamento = BuscadorDepartamento(
             frame,
-            "Ubicación:",
-            self.var_ubicacion,
-            2,
-            readonly=True,
+            opciones=list(DEPARTAMENTOS_UBICACION.keys()),
+            variable=self.var_departamento_manual,
+            on_select=self._on_departamento_seleccionado,
         )
+        self.buscador_departamento.grid(
+            row=1,
+            column=1,
+            sticky="ew",
+            padx=(0, 10),
+            pady=5,
+        )
+        
+        self._campo_ubicacion(frame, 2)
+        frame.columnconfigure(1, weight=1)
+        
+    def _on_departamento_seleccionado(self, departamento: str) -> None:
+        self.var_ubicacion.set(
+            DEPARTAMENTOS_UBICACION.get(departamento.strip(), "")
+        )
+        
 
     # ── Sección: monitores ────────────────────────────────────────────────────
     def _build_monitores_frame(self, parent) -> None:
         frame = self._seccion(parent, "Monitores asociados")
         ttk.Button(frame, text="＋ Agregar monitor", style="Small.TButton",
                    command=self._crear_bloque_monitor).pack(
-            anchor="w", padx=10, pady=(6, 4))
+            anchor="w", padx=10, pady=(4, 4))
         self.monitores_container = ttk.Frame(frame)
         self.monitores_container.pack(fill="x", padx=10, pady=(0, 6))
 
@@ -624,7 +677,7 @@ class InventarioApp:
         frame = self._seccion(parent, "Impresoras asociadas")
         ttk.Button(frame, text="＋ Agregar impresora", style="Small.TButton",
                    command=self._crear_bloque_impresora).pack(
-            anchor="w", padx=10, pady=(6, 4))
+            anchor="w", padx=10, pady=(4, 4))
         self.impresoras_container = ttk.Frame(frame)
         self.impresoras_container.pack(fill="x", padx=10, pady=(0, 6))
 
@@ -638,23 +691,20 @@ class InventarioApp:
         )
         self.txt_observaciones.pack(fill="both", expand=True, padx=10, pady=8)
 
-    # ── Sección: botones de acción ────────────────────────────────────────────
+    # ── Sección: acciones ─────────────────────────────────────────────────────
     def _build_acciones_frame(self, parent) -> None:
-        tk.Frame(parent, bg=C["gris_borde"], height=1).pack(fill="x", pady=(8, 14))
-
+        tk.Frame(parent, bg=C["gris_borde"], height=1).pack(fill="x", pady=(10, 16))
         row = ttk.Frame(parent)
         row.pack(fill="x")
         ttk.Button(row, text="  Registrar equipo  ", style="Primary.TButton",
                    command=self.enviar_datos).pack(side="left")
         ttk.Button(row, text="Cancelar", style="Danger.TButton",
                    command=self.root.destroy).pack(side="right")
-
-        self.lbl_estado = ttk.Label(
-            parent, text="● Estado: listo",
-            foreground=C["gris_sub"], font=("Segoe UI", 9))
+        self.lbl_estado = ttk.Label(parent, text="● Estado: listo",
+                                    foreground=C["gris_sub"], font=("Segoe UI", 9))
         self.lbl_estado.pack(fill="x", pady=(10, 0))
 
-    # ── Discos en el panel automático ─────────────────────────────────────────
+    # ── Discos en panel automático ────────────────────────────────────────────
     def _mostrar_discos_en_auto_frame(self) -> None:
         for w in self.discos_widgets:
             w.destroy()
@@ -663,9 +713,10 @@ class InventarioApp:
 
         for i, disco in enumerate(self.discos_fisicos):
             tipo      = str(disco.get("tipo", "") or "Disco").strip()
-            capacidad = str(disco.get("capacidad", "") or "").strip()
+            capacidad = formatear_capacidad(str(disco.get("capacidad", "") or "").strip())
             if not capacidad:
                 continue
+            disco["capacidad"] = capacidad
             fila = self.fila_discos_inicio + i
             lbl  = ttk.Label(self.auto_frame, text=f"{tipo}:",
                              foreground=C["gris_sub"], font=("Segoe UI", 9))
@@ -677,7 +728,7 @@ class InventarioApp:
             self.discos_widgets.extend([lbl, entry])
             self.discos_entries.append(entry)
 
-    # ── Bloques dinámicos (monitor / impresora) ────────────────────────────────
+    # ── Bloques dinámicos monitor / impresora ─────────────────────────────────
     def _crear_bloque(self, container, lista: list, titulo: str,
                       campos: list, renumerar, datos: dict = None) -> None:
         datos = datos or {}
@@ -692,7 +743,6 @@ class InventarioApp:
 
         btns = ttk.Frame(frame)
         btns.grid(row=0, column=2, rowspan=len(campos), padx=(4, 8), pady=4, sticky="n")
-
         ttk.Button(btns, text="✎ Editar", style="Small.TButton",
                    command=lambda e=entries: self._habilitar_grupo(e)).pack(pady=(0, 4))
         ttk.Button(btns, text="✕ Quitar", style="Small.TButton",
@@ -747,7 +797,7 @@ class InventarioApp:
             e.bind("<FocusOut>", revisar, add="+")
             e.bind("<Return>",   revisar, add="+")
 
-    # ── Reloj ──────────────────────────────────────────────────────────────────
+    # ── Reloj ─────────────────────────────────────────────────────────────────
     def _actualizar_reloj(self) -> None:
         self.var_fecha_hora_visible.set(datetime.now().strftime("%Y-%m-%d   %H:%M:%S"))
         self.root.after(1000, self._actualizar_reloj)
@@ -769,11 +819,16 @@ class InventarioApp:
 
         for clave, fn, _ in CAMPOS_AUTO:
             try:
-                self.datos_auto[clave] = fn()
+                valor = fn()
             except Exception as e:
-                self.datos_auto[clave] = "ERROR"
+                valor = "ERROR"
                 errores.append(f"{clave}: {e}")
-            self.auto_entries[clave]["var"].set(str(self.datos_auto[clave]))
+
+            if clave == "ram":
+                valor = formatear_capacidad(valor)
+
+            self.datos_auto[clave] = valor
+            self.auto_entries[clave]["var"].set(str(valor))
 
         try:
             obtener_ruta_smart()
@@ -850,7 +905,6 @@ class InventarioApp:
             return False
         return True
 
-    # ── Helpers de estado ──────────────────────────────────────────────────────
     def _set_estado(self, texto: str, color: str) -> None:
         self.lbl_estado.config(text=texto, foreground=color)
 
