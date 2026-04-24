@@ -311,10 +311,17 @@ class BuscadorDepartamento(tk.Frame):
 
         palabras = texto.split()
 
-        resultados = [
+        coinciden = [
             dep for dep in self.opciones
             if all(p in self._normalizar(dep) for p in palabras)
-        ][:self.MAX_RESULTADOS]
+        ]
+
+        empiezan = [
+            dep for dep in coinciden
+            if self._normalizar(dep).startswith(texto)
+        ]
+        resto = [dep for dep in coinciden if dep not in empiezan]
+        resultados = (empiezan + resto)[:self.MAX_RESULTADOS]
 
         self.lista.delete(0, tk.END)
 
@@ -658,10 +665,14 @@ class InventarioApp:
         frame.columnconfigure(1, weight=1)
         
     def _on_departamento_seleccionado(self, departamento: str) -> None:
+        if not departamento:
+            self.var_ubicacion.set("")
+            return
+
         self.var_ubicacion.set(
             DEPARTAMENTOS_UBICACION.get(departamento.strip(), "")
         )
-        
+
 
     # ── Sección: monitores ────────────────────────────────────────────────────
     def _build_monitores_frame(self, parent) -> None:
@@ -806,6 +817,9 @@ class InventarioApp:
         item = self.auto_entries.get(clave)
         return item["var"].get().strip() if item else ""
 
+    def _clean(self, var: tk.StringVar) -> str:
+        return var.get().strip().lower()
+
     # ── Carga automática ───────────────────────────────────────────────────────
     def _cargar_datos_automaticos(self) -> None:
         self._set_estado("Cargando datos automáticos…", C["gris_sub"])
@@ -871,22 +885,25 @@ class InventarioApp:
 
     # ── Payload ────────────────────────────────────────────────────────────────
     def construir_payload(self) -> dict:
-        monitores  = [{k: item[k].get().strip().lower()
-                       for k in ("marca", "modelo", "pulgadas")}
-                      for item in self.monitores_vars]
-        impresoras = [{k: item[k].get().strip().lower()
-                       for k in ("tipo", "marca", "modelo", "ip", "toner_tinta")}
-                      for item in self.impresoras_vars]
+        monitores = [
+            {k: item[k].get().strip().lower() for k in ("marca", "modelo", "pulgadas")}
+            for item in self.monitores_vars
+        ]
+        impresoras = [
+            {k: item[k].get().strip().lower() for k in ("tipo", "marca", "modelo", "ip", "toner_tinta")}
+            for item in self.impresoras_vars
+        ]
+
         return {
             **{c: self._get_auto(c) for c, _ in self.AUTO_FIELDS},
-            "usuario":             self.var_usuario.get().strip().lower(),
-            "registrado_por":      self.var_registrado_por.get().strip().lower(),
+            "usuario":             self._clean(self.var_usuario),
+            "registrado_por":      self._clean(self.var_registrado_por),
             "fecha_hora_registro": self.fecha_hora_envio
                                    or datetime.now().strftime("%Y-%m-%d %H:%M"),
             "discos":              self.discos_fisicos,
             "codigo_inventario":   None,
-            "ubicacion":           self.var_ubicacion.get().strip().lower(),
-            "departamento_manual": self.var_departamento_manual.get().strip().lower(),
+            "ubicacion":           self._clean(self.var_ubicacion),
+            "departamento_manual": self._clean(self.var_departamento_manual),
             "monitores":           monitores,
             "impresoras":          impresoras,
             "observaciones":       self.txt_observaciones.get("1.0", "end").strip().lower() or None,
@@ -919,7 +936,8 @@ class InventarioApp:
             return
 
         try:
-            url = open(CONFIG_PATH, encoding="utf-8").read().strip()
+            with open(CONFIG_PATH, encoding="utf-8") as f:
+                url = f.read().strip()
         except Exception as e:
             messagebox.showerror("Error de configuración",
                                  f"No se encontró config.txt\n\n{e}")

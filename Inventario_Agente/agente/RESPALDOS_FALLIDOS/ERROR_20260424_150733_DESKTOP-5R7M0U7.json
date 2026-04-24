@@ -1,0 +1,66 @@
+{
+    "fecha": "2026-04-24 15:07:33",
+    "estado": "ERROR_ENVIO",
+    "respuesta_servidor": "HTTPConnectionPool(host='localhost', port=80): Max retries exceeded with url: /Inventario_Agente/api/guardar_equipo.php (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=80): Failed to establish a new connection: [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión\"))",
+    "datos_equipo": {
+        "nombre_pc": "DESKTOP-5R7M0U7",
+        "departamento": "WORKGROUP",
+        "sistema_operativo": "Windows 10 Pro x64",
+        "anydesk": "457504316",
+        "cpu": "AMD Ryzen 5 4500U",
+        "ram": "11 GB",
+        "ip": "195.168.82.243",
+        "uuid": "401800C7-53B8-EB11-810A-E4A8DF8CDE24",
+        "serial": "MP1Z6F33",
+        "usuario": "jorge hormazabaal",
+        "registrado_por": "alexander merino",
+        "fecha_hora_registro": "2026-04-24 15:07",
+        "discos": [
+            {
+                "modelo": "WDC WD10SPZX-08Z10",
+                "capacidad": "932 GB",
+                "espacio_libre_gb": 919.0,
+                "tipo": "HDD",
+                "salud": "100%",
+                "horas": 8095,
+                "errores": 0,
+                "temperatura": 48
+            },
+            {
+                "modelo": "SAMSUNG MZALQ128HBHQ-000L1",
+                "capacidad": "119 GB",
+                "espacio_libre_gb": 42.21,
+                "tipo": "SSD",
+                "salud": "100%",
+                "horas": 0,
+                "errores": 0,
+                "temperatura": 39
+            }
+        ],
+        "codigo_inventario": null,
+        "ubicacion": "dieciocho de septiembre 510",
+        "departamento_manual": "adm-informatica",
+        "monitores": [
+            {
+                "marca": "lenovo",
+                "modelo": "lenovo a350-b-a",
+                "pulgadas": "24"
+            },
+            {
+                "marca": "lg",
+                "modelo": "lg full hd",
+                "pulgadas": "22"
+            }
+        ],
+        "impresoras": [
+            {
+                "tipo": "no detectada",
+                "marca": "",
+                "modelo": "",
+                "ip": "",
+                "toner_tinta": ""
+            }
+        ],
+        "observaciones": null
+    }
+}
